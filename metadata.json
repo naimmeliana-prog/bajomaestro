@@ -1,0 +1,6 @@
+{
+  "name": "BajoMaestro — Método Integral de Bajo Eléctrico y Acústico",
+  "description": "Método completo y progresivo para bajo eléctrico y acústico: técnica, lectura a primera vista, teoría, repertorio multigenérico, afinador preciso, metrónomo, detector de acordes y sincronización en la nube.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

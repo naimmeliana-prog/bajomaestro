@@ -1,0 +1,212 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Safety Net (Default Deny)
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- Reusable Primitives ---
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedUser() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isVerifiedOwner(userId) {
+      return isVerifiedUser() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function parentUserExists(userId) {
+      return exists(/databases/$(database)/documents/users/$(userId));
+    }
+
+    // --- Validation Blueprints ---
+    function isValidUserProfile(data, userId) {
+      return data.keys().hasAll([
+        'uid', 'displayName', 'email', 'theme', 'preferredTuning',
+        'instrumentType', 'dailyGoalMinutes', 'createdAt', 'updatedAt'
+      ])
+      && data.keys().hasOnly([
+        'uid', 'displayName', 'email', 'theme', 'preferredTuning',
+        'instrumentType', 'dailyGoalMinutes', 'createdAt', 'updatedAt'
+      ])
+      && data.uid is string && data.uid == userId && data.uid == request.auth.uid
+      && data.displayName is string && data.displayName.size() >= 1 && data.displayName.size() <= 100
+      && data.email is string && data.email.size() >= 3 && data.email.size() <= 160
+      && data.theme in ['light', 'dark']
+      && data.preferredTuning is string && data.preferredTuning.size() >= 1 && data.preferredTuning.size() <= 32
+      && data.instrumentType in ['electric', 'acoustic', 'both']
+      && data.dailyGoalMinutes is int && data.dailyGoalMinutes >= 5 && data.dailyGoalMinutes <= 240
+      && data.createdAt is timestamp
+      && data.updatedAt is timestamp;
+    }
+
+    function isValidLessonProgress(data, userId, lessonId) {
+      return data.keys().hasAll([
+        'userId', 'lessonId', 'completed', 'masteryPercent',
+        'bestBpm', 'practiceMinutes', 'notes', 'createdAt', 'updatedAt'
+      ])
+      && data.keys().hasOnly([
+        'userId', 'lessonId', 'completed', 'masteryPercent',
+        'bestBpm', 'practiceMinutes', 'notes', 'createdAt', 'updatedAt'
+      ])
+      && data.userId is string && data.userId == userId && data.userId == request.auth.uid
+      && data.lessonId is string && data.lessonId == lessonId && data.lessonId.size() <= 80
+      && data.completed is bool
+      && data.masteryPercent is int && data.masteryPercent >= 0 && data.masteryPercent <= 100
+      && data.bestBpm is int && data.bestBpm >= 20 && data.bestBpm <= 300
+      && data.practiceMinutes is int && data.practiceMinutes >= 0 && data.practiceMinutes <= 100000
+      && data.notes is string && data.notes.size() <= 1000
+      && data.createdAt is timestamp
+      && data.updatedAt is timestamp;
+    }
+
+    function isValidPracticeItem(data, userId) {
+      return data.keys().hasAll([
+        'userId', 'title', 'category', 'targetBpm', 'durationMinutes',
+        'completedToday', 'lessonId', 'order', 'createdAt', 'updatedAt'
+      ])
+      && data.keys().hasOnly([
+        'userId', 'title', 'category', 'targetBpm', 'durationMinutes',
+        'completedToday', 'lessonId', 'order', 'createdAt', 'updatedAt'
+      ])
+      && data.userId is string && data.userId == userId && data.userId == request.auth.uid
+      && data.title is string && data.title.size() >= 1 && data.title.size() <= 120
+      && data.category in ['technique', 'theory', 'sight_reading', 'repertoire', 'ear_training']
+      && data.targetBpm is int && data.targetBpm >= 30 && data.targetBpm <= 260
+      && data.durationMinutes is int && data.durationMinutes >= 1 && data.durationMinutes <= 180
+      && data.completedToday is bool
+      && data.lessonId is string && data.lessonId.size() <= 80
+      && data.order is int && data.order >= 0 && data.order <= 500
+      && data.createdAt is timestamp
+      && data.updatedAt is timestamp;
+    }
+
+    function isValidPracticeLog(data, userId) {
+      return data.keys().hasAll([
+        'userId', 'dateKey', 'durationMinutes', 'bpm',
+        'focusArea', 'lessonId', 'notes', 'createdAt'
+      ])
+      && data.keys().hasOnly([
+        'userId', 'dateKey', 'durationMinutes', 'bpm',
+        'focusArea', 'lessonId', 'notes', 'createdAt'
+      ])
+      && data.userId is string && data.userId == userId && data.userId == request.auth.uid
+      && data.dateKey is string && data.dateKey.size() == 10 && data.dateKey.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
+      && data.durationMinutes is int && data.durationMinutes >= 1 && data.durationMinutes <= 480
+      && data.bpm is int && data.bpm >= 20 && data.bpm <= 300
+      && data.focusArea is string && data.focusArea.size() >= 1 && data.focusArea.size() <= 80
+      && data.lessonId is string && data.lessonId.size() <= 80
+      && data.notes is string && data.notes.size() <= 500
+      && data.createdAt is timestamp;
+    }
+
+    // --- Collection Rules ---
+    match /users/{userId} {
+      allow get: if isValidId(userId) && isOwner(userId);
+      allow list: if false;
+      allow create: if isValidId(userId)
+        && isVerifiedOwner(userId)
+        && isValidUserProfile(incoming(), userId)
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isValidId(userId)
+        && isVerifiedOwner(userId)
+        && isValidUserProfile(incoming(), userId)
+        && incoming().uid == existing().uid
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && (
+          incoming().diff(existing()).affectedKeys().hasOnly(['theme', 'updatedAt']) ||
+          incoming().diff(existing()).affectedKeys().hasOnly(['preferredTuning', 'instrumentType', 'dailyGoalMinutes', 'updatedAt']) ||
+          incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'email', 'theme', 'preferredTuning', 'instrumentType', 'dailyGoalMinutes', 'updatedAt'])
+        );
+      allow delete: if isValidId(userId) && isVerifiedOwner(userId);
+
+      // Subcollection: Lesson Progress
+      match /lessonProgress/{lessonId} {
+        allow get: if isValidId(userId) && isValidId(lessonId) && isOwner(userId);
+        allow list: if isValidId(userId) && isOwner(userId) && resource.data.userId == request.auth.uid;
+        allow create: if isValidId(userId) && isValidId(lessonId)
+          && isVerifiedOwner(userId)
+          && isValidLessonProgress(incoming(), userId, lessonId)
+          && incoming().createdAt == request.time
+          && incoming().updatedAt == request.time
+          && parentUserExists(userId);
+        allow update: if isValidId(userId) && isValidId(lessonId)
+          && isVerifiedOwner(userId)
+          && isValidLessonProgress(incoming(), userId, lessonId)
+          && incoming().userId == existing().userId
+          && incoming().lessonId == existing().lessonId
+          && incoming().createdAt == existing().createdAt
+          && incoming().updatedAt == request.time
+          && parentUserExists(userId)
+          && (
+            incoming().diff(existing()).affectedKeys().hasOnly(['completed', 'masteryPercent', 'updatedAt']) ||
+            incoming().diff(existing()).affectedKeys().hasOnly(['bestBpm', 'practiceMinutes', 'updatedAt']) ||
+            incoming().diff(existing()).affectedKeys().hasOnly(['notes', 'updatedAt']) ||
+            incoming().diff(existing()).affectedKeys().hasOnly(['completed', 'masteryPercent', 'bestBpm', 'practiceMinutes', 'notes', 'updatedAt'])
+          );
+        allow delete: if isValidId(userId) && isValidId(lessonId) && isVerifiedOwner(userId);
+      }
+
+      // Subcollection: Daily Practice Items
+      match /practiceItems/{itemId} {
+        allow get: if isValidId(userId) && isValidId(itemId) && isOwner(userId);
+        allow list: if isValidId(userId) && isOwner(userId) && resource.data.userId == request.auth.uid;
+        allow create: if isValidId(userId) && isValidId(itemId)
+          && isVerifiedOwner(userId)
+          && isValidPracticeItem(incoming(), userId)
+          && incoming().createdAt == request.time
+          && incoming().updatedAt == request.time
+          && parentUserExists(userId);
+        allow update: if isValidId(userId) && isValidId(itemId)
+          && isVerifiedOwner(userId)
+          && isValidPracticeItem(incoming(), userId)
+          && incoming().userId == existing().userId
+          && incoming().createdAt == existing().createdAt
+          && incoming().updatedAt == request.time
+          && parentUserExists(userId)
+          && (
+            incoming().diff(existing()).affectedKeys().hasOnly(['completedToday', 'updatedAt']) ||
+            incoming().diff(existing()).affectedKeys().hasOnly(['order', 'updatedAt']) ||
+            incoming().diff(existing()).affectedKeys().hasOnly(['title', 'category', 'targetBpm', 'durationMinutes', 'lessonId', 'order', 'completedToday', 'updatedAt'])
+          );
+        allow delete: if isValidId(userId) && isValidId(itemId) && isVerifiedOwner(userId);
+      }
+
+      // Subcollection: Practice Session Logs
+      match /practiceLogs/{logId} {
+        allow get: if isValidId(userId) && isValidId(logId) && isOwner(userId);
+        allow list: if isValidId(userId) && isOwner(userId) && resource.data.userId == request.auth.uid;
+        allow create: if isValidId(userId) && isValidId(logId)
+          && isVerifiedOwner(userId)
+          && isValidPracticeLog(incoming(), userId)
+          && incoming().createdAt == request.time
+          && parentUserExists(userId);
+        allow update: if false;
+        allow delete: if isValidId(userId) && isValidId(logId) && isVerifiedOwner(userId);
+      }
+    }
+  }
+}

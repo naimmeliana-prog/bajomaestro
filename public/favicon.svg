@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none">
+  <defs>
+    <linearGradient id="bassAmber" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FBBF24" />
+      <stop offset="55%" stop-color="#F59E0B" />
+      <stop offset="100%" stop-color="#EA580C" />
+    </linearGradient>
+    <linearGradient id="bassSteel" x1="0" y1="0" x2="0" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#E2E8F0" />
+      <stop offset="100%" stop-color="#94A3B8" />
+    </linearGradient>
+  </defs>
+  <!-- Four bass strings spanning full vertical height edge-to-edge -->
+  <rect x="6" y="0" width="3.5" height="64" rx="1.75" fill="url(#bassSteel)" opacity="0.92" />
+  <rect x="13" y="0" width="2.8" height="64" rx="1.4" fill="url(#bassSteel)" opacity="0.88" />
+  <rect x="19.5" y="0" width="2.2" height="64" rx="1.1" fill="url(#bassSteel)" opacity="0.84" />
+  <rect x="25.5" y="0" width="1.7" height="64" rx="0.85" fill="url(#bassSteel)" opacity="0.8" />
+  <!-- Oversized Bass Clef (Clave de Fa) filling full canvas without background -->
+  <path
+    d="M17.5 18.5C17.5 7.5 26.8 1.5 37.5 1.5C47.8 1.5 54.5 9.2 54.5 20.5C54.5 35.8 41.2 49.2 14.5 62.5L11.5 57.5C32.2 46.2 43.2 34.4 43.2 21.2C43.2 14.2 39.2 9.8 33.4 9.8C27.4 9.8 23.6 13.4 23.6 18.2C23.6 19.6 24 20.6 24.5 21.2C26.5 20 29.2 20.2 31.2 22.1C33.4 24.2 33.5 27.9 31.4 30.2C29.1 32.7 25.1 32.9 22.4 30.8C18.9 28.1 17.5 23.8 17.5 18.5Z"
+    fill="url(#bassAmber)"
+  />
+  <!-- Two dots of the Bass Clef reaching right edge -->
+  <circle cx="58.5" cy="14.5" r="4.5" fill="url(#bassAmber)" />
+  <circle cx="58.5" cy="28.5" r="4.5" fill="url(#bassAmber)" />
+  <!-- Bridge/fret accent bar at bottom left -->
+  <rect x="0" y="54" width="30" height="4.5" rx="2.25" fill="#D97706" />
+</svg>

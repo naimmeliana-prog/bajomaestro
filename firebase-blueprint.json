@@ -1,0 +1,236 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Perfil y preferencias personales del bajista autenticado",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "UID de Firebase Auth del propietario"
+        },
+        "displayName": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 160
+        },
+        "theme": {
+          "type": "string",
+          "enum": ["light", "dark"]
+        },
+        "preferredTuning": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "instrumentType": {
+          "type": "string",
+          "enum": ["electric", "acoustic", "both"]
+        },
+        "dailyGoalMinutes": {
+          "type": "integer"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "uid",
+        "displayName",
+        "email",
+        "theme",
+        "preferredTuning",
+        "instrumentType",
+        "dailyGoalMinutes",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "LessonProgress": {
+      "title": "LessonProgress",
+      "description": "Seguimiento individual de dominio, BPM y notas por lección",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "lessonId": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "completed": {
+          "type": "boolean"
+        },
+        "masteryPercent": {
+          "type": "integer"
+        },
+        "bestBpm": {
+          "type": "integer"
+        },
+        "practiceMinutes": {
+          "type": "integer"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "userId",
+        "lessonId",
+        "completed",
+        "masteryPercent",
+        "bestBpm",
+        "practiceMinutes",
+        "notes",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "PracticeItem": {
+      "title": "PracticeItem",
+      "description": "Bloque de rutina diaria de estudio en el organizador de práctica",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "category": {
+          "type": "string",
+          "enum": ["technique", "theory", "sight_reading", "repertoire", "ear_training"]
+        },
+        "targetBpm": {
+          "type": "integer"
+        },
+        "durationMinutes": {
+          "type": "integer"
+        },
+        "completedToday": {
+          "type": "boolean"
+        },
+        "lessonId": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "order": {
+          "type": "integer"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "userId",
+        "title",
+        "category",
+        "targetBpm",
+        "durationMinutes",
+        "completedToday",
+        "lessonId",
+        "order",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "PracticeSessionLog": {
+      "title": "PracticeSessionLog",
+      "description": "Registro histórico de sesiones de estudio completadas",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "dateKey": {
+          "type": "string",
+          "maxLength": 10
+        },
+        "durationMinutes": {
+          "type": "integer"
+        },
+        "bpm": {
+          "type": "integer"
+        },
+        "focusArea": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "lessonId": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "userId",
+        "dateKey",
+        "durationMinutes",
+        "bpm",
+        "focusArea",
+        "lessonId",
+        "notes",
+        "createdAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/UserProfile"
+      },
+      "description": "Perfil privado y preferencias de sincronización del usuario"
+    },
+    "/users/{userId}/lessonProgress/{lessonId}": {
+      "schema": {
+        "$ref": "#/entities/LessonProgress"
+      },
+      "description": "Progreso individual por lección vinculado al usuario propietario"
+    },
+    "/users/{userId}/practiceItems/{itemId}": {
+      "schema": {
+        "$ref": "#/entities/PracticeItem"
+      },
+      "description": "Elementos de la rutina diaria de práctica del usuario"
+    },
+    "/users/{userId}/practiceLogs/{logId}": {
+      "schema": {
+        "$ref": "#/entities/PracticeSessionLog"
+      },
+      "description": "Historial inmutable de sesiones de estudio registradas"
+    }
+  }
+}

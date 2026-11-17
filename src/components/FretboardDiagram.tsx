@@ -1,7 +1,18 @@
 import React from 'react';
 import { BoxShapeDef, TuningPreset } from '../types/music';
 import { BassToneMode, playBassNote } from '../utils/audioEngine';
-import { NOTE_NAMES_SHARP, TUNING_PRESETS } from '../utils/musicTheory';
+import { midiToFrequency, midiToNoteInfo, NOTE_NAMES_SHARP, TUNING_PRESETS } from '../utils/musicTheory';
+
+export interface FretboardClickedNote {
+  midi: number;
+  stringIndex: number;
+  stringLabel: string;
+  fret: number;
+  noteIntl: string;
+  noteEs: string;
+  hz: number;
+  interval: string;
+}
 
 interface FretboardDiagramProps {
   rootPitchClass: number;
@@ -10,9 +21,13 @@ interface FretboardDiagramProps {
   blueNoteSemitones?: number[];
   activeShape?: BoxShapeDef;
   displayMode?: 'full' | 'shape';
+  labelDisplay?: 'interval' | 'note';
+  activePitchClass?: number | null;
+  activeFretCoord?: { stringIndex: number; fret: number } | null;
   tuning?: TuningPreset;
   toneMode?: BassToneMode;
   maxFrets?: number;
+  onNoteClick?: (note: FretboardClickedNote) => void;
 }
 
 const FRET_MARKERS = [3, 5, 7, 9, 12, 15];
@@ -24,9 +39,13 @@ export const FretboardDiagram: React.FC<FretboardDiagramProps> = ({
   blueNoteSemitones = [],
   activeShape,
   displayMode = 'full',
+  labelDisplay = 'interval',
+  activePitchClass = null,
+  activeFretCoord = null,
   tuning = TUNING_PRESETS[0],
   toneMode = 'electric_finger',
   maxFrets = 15,
+  onNoteClick,
 }) => {
   const stringCount = tuning.strings.length;
   const fretWidth = 54;
@@ -53,9 +72,11 @@ export const FretboardDiagram: React.FC<FretboardDiagramProps> = ({
   });
 
   // Compute concrete fretboard coordinates if in Box Shape mode
-  const shapePointsMap = new Map<string, { finger: string; interval: string; isRoot?: boolean; isBlueNote?: boolean }>();
+  const shapePointsMap = new Map<
+    string,
+    { finger: string; interval: string; isRoot?: boolean; isBlueNote?: boolean }
+  >();
   if (activeShape) {
-    // Find anchor fret on bottom-most strings (e.g., E or A string in preset)
     const bottomIndex = tuning.strings.length - 1;
     const targetStringIdx = Math.max(0, bottomIndex - activeShape.anchorStringFromBottom);
     const openPc = ((tuning.strings[targetStringIdx].midi % 12) + 12) % 12;
@@ -180,24 +201,60 @@ export const FretboardDiagram: React.FC<FretboardDiagramProps> = ({
 
             const isRoot = shapePt ? shapePt.isRoot : match?.isRoot;
             const isBlueNote = shapePt ? shapePt.isBlueNote : match?.isBlueNote;
+            const isCoordActive =
+              activeFretCoord !== null &&
+              activeFretCoord.stringIndex === sIdx &&
+              activeFretCoord.fret === fret;
+            const isPitchHighlighted =
+              activePitchClass !== null && activePitchClass === pc;
+
             const cx = fret === 0 ? nutX - 16 : nutX + fret * fretWidth - fretWidth / 2;
 
-            const circleFill = isRoot
-              ? 'fill-amber-600 stroke-amber-200 dark:fill-amber-500 dark:stroke-amber-200'
-              : isBlueNote
-                ? 'fill-sky-600 stroke-sky-200 dark:fill-sky-500 dark:stroke-sky-200'
-                : 'fill-slate-900 dark:fill-slate-700 stroke-white dark:stroke-slate-900 group-hover:fill-amber-600';
+            const circleFill = isCoordActive
+              ? 'fill-emerald-500 stroke-white dark:stroke-slate-950'
+              : isPitchHighlighted
+                ? 'fill-emerald-600 stroke-emerald-200 dark:fill-emerald-500 dark:stroke-emerald-100'
+                : isRoot
+                  ? 'fill-amber-600 stroke-amber-200 dark:fill-amber-500 dark:stroke-amber-200'
+                  : isBlueNote
+                    ? 'fill-sky-600 stroke-sky-200 dark:fill-sky-500 dark:stroke-sky-200'
+                    : 'fill-slate-900 dark:fill-slate-700 stroke-white dark:stroke-slate-900 group-hover:fill-amber-600';
 
-            const labelText = shapePt
-              ? `${shapePt.interval}`
-              : match?.label || '';
+            const intervalStr = shapePt ? shapePt.interval : match?.label || '';
+            const labelText =
+              labelDisplay === 'note' ? NOTE_NAMES_SHARP[pc] : intervalStr;
 
             return (
               <g
                 key={`${sIdx}-${fret}`}
-                onClick={() => playBassNote(midi, 0.75, toneMode)}
+                onClick={() => {
+                  playBassNote(midi, 0.75, toneMode);
+                  if (onNoteClick) {
+                    const info = midiToNoteInfo(midi, false);
+                    onNoteClick({
+                      midi,
+                      stringIndex: sIdx,
+                      stringLabel: str.label,
+                      fret,
+                      noteIntl: info.intl,
+                      noteEs: info.es,
+                      hz: midiToFrequency(midi),
+                      interval: intervalStr,
+                    });
+                  }
+                }}
                 className="cursor-pointer group"
               >
+                {(isCoordActive || isPitchHighlighted) && (
+                  <circle
+                    cx={cx}
+                    cy={y}
+                    r={16}
+                    className="fill-none stroke-emerald-400"
+                    strokeWidth={2}
+                    opacity={0.85}
+                  />
+                )}
                 <circle cx={cx} cy={y} r={12.5} className={circleFill} strokeWidth={1.6} />
                 <text
                   x={cx}

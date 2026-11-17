@@ -1,27 +1,41 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { Info, Music2, Play, Volume2 } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
+import { Activity, Info, Music2, Play, Volume2 } from 'lucide-react';
 import { FretboardDiagram } from '../components/FretboardDiagram';
 import { NotationDisplay } from '../components/NotationDisplay';
 import { SearchFilterBar } from '../components/SearchFilterBar';
+import { useTheorySelection } from '../context/TheorySelectionContext';
 import { CHORDS_LIBRARY, SCALES_AND_MODES } from '../data/theoryLibrary';
 import { NoteEvent } from '../types/music';
 import { playBassNote } from '../utils/audioEngine';
 import { NOTE_NAMES_ES_SHARP, NOTE_NAMES_SHARP, TUNING_PRESETS } from '../utils/musicTheory';
 
-export const LibraryView: React.FC = () => {
-  const [libraryTab, setLibraryTab] = useState<'scales' | 'chords'>('scales');
-  const [rootPc, setRootPc] = useState<number>(4); // E default
-  const [tuningId, setTuningId] = useState<string>('4-standard');
-  const [fretboardMode, setFretboardMode] = useState<'shape' | 'full'>('shape');
-  const [selectedShapeIdx, setSelectedShapeIdx] = useState<number>(0);
+interface LibraryViewProps {
+  onOpenLab?: () => void;
+}
+
+export const LibraryView: React.FC<LibraryViewProps> = ({ onOpenLab }) => {
+  const {
+    libraryTab,
+    setLibraryTab,
+    rootPc,
+    setRootPc,
+    tuningId,
+    setTuningId,
+    fretboardMode,
+    setFretboardMode,
+    selectedShapeIdx,
+    setSelectedShapeIdx,
+    selectedScaleId,
+    setSelectedScaleId,
+    selectedChordId,
+    setSelectedChordId,
+    toneMode,
+  } = useTheorySelection();
 
   const [query, setQuery] = useState('');
   const [genre, setGenre] = useState('');
   const [artist, setArtist] = useState('');
   const [album, setAlbum] = useState('');
-
-  const [selectedScaleId, setSelectedScaleId] = useState(SCALES_AND_MODES[0].id);
-  const [selectedChordId, setSelectedChordId] = useState(CHORDS_LIBRARY[0].id);
 
   const tuning = TUNING_PRESETS.find((t) => t.id === tuningId) || TUNING_PRESETS[0];
   const activeItems = libraryTab === 'scales' ? SCALES_AND_MODES : CHORDS_LIBRARY;
@@ -72,10 +86,6 @@ export const LibraryView: React.FC = () => {
 
   const availableShapes =
     libraryTab === 'scales' ? activeScale.shapes || [] : activeChord.shapes || [];
-
-  useEffect(() => {
-    setSelectedShapeIdx(0);
-  }, [libraryTab, activeScale.id, activeChord.id]);
 
   const activeShape = availableShapes[selectedShapeIdx];
 
@@ -340,14 +350,27 @@ export const LibraryView: React.FC = () => {
                 </div>
               </div>
 
-              <button
-                type="button"
-                onClick={handleAudition}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold transition-colors cursor-pointer"
-              >
-                <Play className="w-3.5 h-3.5" />
-                Escuchar {libraryTab === 'scales' ? 'Escala' : 'Arpegio'}
-              </button>
+              <div className="flex flex-wrap items-center gap-2">
+                {onOpenLab && (
+                  <button
+                    type="button"
+                    onClick={onOpenLab}
+                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:border-amber-500 transition-colors cursor-pointer"
+                  >
+                    <Activity className="w-3.5 h-3.5 text-amber-600" />
+                    Ver en Laboratorio
+                  </button>
+                )}
+
+                <button
+                  type="button"
+                  onClick={handleAudition}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold transition-colors cursor-pointer"
+                >
+                  <Play className="w-3.5 h-3.5" />
+                  Escuchar {libraryTab === 'scales' ? 'Escala' : 'Arpegio'}
+                </button>
+              </div>
             </div>
 
             {/* Note / Interval Table */}
@@ -522,6 +545,7 @@ export const LibraryView: React.FC = () => {
               activeShape={activeShape}
               displayMode={availableShapes.length > 0 ? fretboardMode : 'full'}
               tuning={tuning}
+              toneMode={toneMode}
             />
           </div>
 

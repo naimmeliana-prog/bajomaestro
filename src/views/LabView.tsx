@@ -11,6 +11,7 @@ import {
   Volume2,
 } from 'lucide-react';
 import { AdvancedMetronome } from '../components/AdvancedMetronome';
+import { LabFretboard } from '../components/LabFretboard';
 import { useSync } from '../context/SyncContext';
 import {
   analyzeHarmonicSpectrum,
@@ -22,7 +23,11 @@ import {
 } from '../utils/audioEngine';
 import { NOTE_NAMES_ES_SHARP, NOTE_NAMES_SHARP, TUNING_PRESETS } from '../utils/musicTheory';
 
-export const LabView: React.FC = () => {
+interface LabViewProps {
+  onOpenLibrary?: () => void;
+}
+
+export const LabView: React.FC<LabViewProps> = ({ onOpenLibrary }) => {
   const { preferences, updatePreferences } = useSync();
 
   // ---------------- TUNER STATE ----------------
@@ -370,6 +375,18 @@ export const LabView: React.FC = () => {
         {/* 2. ADVANCED METRONOME */}
         <AdvancedMetronome />
       </div>
+
+      {/* Middle Row: Interactive Library-Synced Fretboard */}
+      <LabFretboard
+        liveMicPitchClass={tunerReading ? ((tunerReading.midi % 12) + 12) % 12 : null}
+        liveMicNoteLabel={tunerReading ? `${tunerReading.noteIntl} (${tunerReading.noteEs})` : null}
+        detectedChordSymbol={
+          detectorActive && harmonicResult.detectedChord !== '—'
+            ? harmonicResult.detectedChord
+            : null
+        }
+        onOpenLibrary={onOpenLibrary}
+      />
 
       {/* Bottom Row: Microphone Real-Time Key & Chord Detector */}
       <section className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 space-y-5">

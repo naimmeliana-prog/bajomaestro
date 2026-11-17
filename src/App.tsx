@@ -21,6 +21,7 @@ import {
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { PdfLibraryModal } from './components/PdfLibraryModal';
 import { SyncProvider, useSync } from './context/SyncContext';
+import { TheorySelectionProvider } from './context/TheorySelectionContext';
 import { LabView } from './views/LabView';
 import { LibraryView } from './views/LibraryView';
 import { MethodView } from './views/MethodView';
@@ -181,8 +182,8 @@ const AppShell: React.FC = () => {
         {activeTab === 'techniques' && <TechniquesView onOpenPdf={handleOpenPdf} />}
         {activeTab === 'sight_reading' && <SightReadingView onOpenPdf={handleOpenPdf} />}
         {activeTab === 'repertoire' && <RepertoireView onOpenPdf={handleOpenPdf} />}
-        {activeTab === 'library' && <LibraryView />}
-        {activeTab === 'lab' && <LabView />}
+        {activeTab === 'library' && <LibraryView onOpenLab={() => setActiveTab('lab')} />}
+        {activeTab === 'lab' && <LabView onOpenLibrary={() => setActiveTab('library')} />}
         {activeTab === 'practice' && <PracticePlanView />}
       </main>
 
@@ -199,7 +200,9 @@ export default function App() {
   return (
     <ErrorBoundary>
       <SyncProvider>
-        <AppShell />
+        <TheorySelectionProvider>
+          <AppShell />
+        </TheorySelectionProvider>
       </SyncProvider>
     </ErrorBoundary>
   );

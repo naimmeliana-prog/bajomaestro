@@ -10,6 +10,7 @@ export type TechniqueCategory =
 export type AnimatorPreset =
   | 'floating_thumb'
   | 'slap_pop'
+  | 'staccato_muting'
   | 'left_hand'
   | 'blues_shuffle'
   | 'rocknroll'
@@ -29,6 +30,11 @@ export interface TechniqueStep {
   notes: NoteEvent[];
 }
 
+export interface DiagramCallout {
+  color: 'amber' | 'sky';
+  label: string;
+}
+
 export interface TechniqueGuide {
   id: string;
   title: string;
@@ -36,6 +42,7 @@ export interface TechniqueGuide {
   level: 'Principiante' | 'Intermedio' | 'Avanzado';
   imageUrl: string;
   imageAlt: string;
+  diagramCallouts: DiagramCallout[];
   summary: string;
   anatomyPoints: string[];
   commonMistakes: string[];
@@ -52,8 +59,12 @@ export const TECHNIQUE_GUIDES: TechniqueGuide[] = [
     title: 'Muteo Flotante (Floating Thumb)',
     category: 'Mano Derecha',
     level: 'Intermedio',
-    imageUrl: '/src/assets/images/bass_floating_thumb_1794916419496.jpg',
-    imageAlt: 'Técnica de muteo flotante con el pulgar derecho reposando sobre las cuerdas graves del bajo',
+    imageUrl: '/src/assets/images/diagram_floating_thumb_1794953260312.jpg',
+    imageAlt: 'Diagrama ilustrativo de postura del Muteo Flotante (Floating Thumb) con pulgar derecho apagando cuerdas graves',
+    diagramCallouts: [
+      { color: 'amber', label: 'Desplazamiento vertical del pulgar siguiendo los saltos de cuerda' },
+      { color: 'sky', label: 'Zonas de contacto lateral del pulgar e índice silenciando cuerdas graves' },
+    ],
     summary:
       'La técnica estándar moderna para evitar ruidos por simpatía al cambiar de cuerda. A diferencia del anclaje fijo en la pastilla, el pulgar derecho desciende y flota apoyando su lateral sobre todas las cuerdas más graves que la cuerda que estás pulsando.',
     anatomyPoints: [
@@ -141,8 +152,12 @@ export const TECHNIQUE_GUIDES: TechniqueGuide[] = [
     title: 'Slap & Pop Progresivo',
     category: 'Mano Derecha',
     level: 'Intermedio',
-    imageUrl: '/src/assets/images/bass_slap_pop_1794916420082.jpg',
-    imageAlt: 'Posición paralela del pulgar para slap y enganche del dedo índice para pop en bajo eléctrico',
+    imageUrl: '/src/assets/images/diagram_slap_pop_1794953261576.jpg',
+    imageAlt: 'Diagrama ilustrativo de postura para Slap y Pop mostrando pulgar paralelo y enganche del dedo índice',
+    diagramCallouts: [
+      { color: 'amber', label: 'Rotación del antebrazo y rebote rápido del pulgar sobre el último traste' },
+      { color: 'sky', label: 'Articulación ósea del pulgar (Slap) y yema del índice bajo Sol (Pop)' },
+    ],
     summary:
       'Desarrollado por Larry Graham y perfeccionado por Marcus Miller y Flea. El sonido nace de la rotación rápida del antebrazo (como girar un pomo de puerta), golpeando la cuerda justo encima del último traste y tirando de las agudas con el índice.',
     anatomyPoints: [
@@ -226,12 +241,103 @@ export const TECHNIQUE_GUIDES: TechniqueGuide[] = [
     ],
   },
   {
+    id: 'tech-staccato-muting',
+    title: 'Staccato, Palm Mute y Corte Rítmico',
+    category: 'Mano Derecha',
+    level: 'Principiante',
+    imageUrl: '/src/assets/images/diagram_staccato_muting_1794953285896.jpg',
+    imageAlt: 'Diagrama ilustrativo de postura para Staccato y Palm Mute mostrando apagado en el puente y liberación izquierda',
+    diagramCallouts: [
+      { color: 'amber', label: 'Micro-relajación de dedos izquierdos sin perder contacto con la cuerda' },
+      { color: 'sky', label: 'Apoyo suave del canto de la palma derecha junto a las selletas del puente' },
+    ],
+    summary:
+      'El control del silencio define el groove tanto como las propias notas. Combina el staccato de mano izquierda (relajar la presión sin despegar la yema) con el Palm Mute derecho junto al puente para lograr notas cortas, secas y percusivas al instante.',
+    anatomyPoints: [
+      'Staccato izquierdo: pulsa la nota y relaja de inmediato el dedo pisador manteniendo la yema tocando la cuerda para apagarla sin producir un ruido al aire.',
+      'Palm Mute derecho: apoya suavemente el borde carnoso externo de la palma sobre las cuerdas justo delante de las selletas del puente.',
+      'Con la palma apoyada en el puente, pulsa las cuerdas con el pulgar (thumb pluck) o los dedos índice/medio logrando un timbre redondo estilo Motown/años 60.',
+      'Alterna notas largas (legato) y notas secas (staccato) para crear contraste dinámico y hacer respirar la batería.',
+    ],
+    commonMistakes: [
+      'Levantar completamente el dedo izquierdo de la cuerda al hacer staccato: provoca que la cuerda suene al aire o genere armónicos.',
+      'Apoyar la palma demasiado lejos del puente: mata completamente la afinación convirtiéndola en un golpe sordo sin tono.',
+      'Cortar tarde la nota haciendo que el bajo se monte encima de los silencios del bombo o la caja.',
+    ],
+    electricNotes:
+      'Brilla en Funk, Disco, Soul (estilo Carol Kaye / Pino Palladino) y Reggae. Prueba colocar espuma bajo el puente o usar Palm Mute con púa o pulgar.',
+    acousticNotes:
+      'En bajo acústico, el corte rápido con mano izquierda evita que la caja siga zumbando y mantiene definida cada línea rítmica.',
+    pdfSourceId: 'pdf-rock-bass-basics',
+    animatorPreset: 'staccato_muting',
+    steps: [
+      {
+        stepNumber: 1,
+        title: 'Paso 1: Staccato limpio con relajación de mano izquierda',
+        explanation:
+          'Pulsa cada negra en Do y Mi relajando la presión de la mano izquierda justo en la mitad del pulso para crear cortes secos sin ruidos de cuerda al aire.',
+        visualCue: 'Relaja dedo 2 (C) y dedo 1 (E) manteniendo contacto superficial',
+        bpm: 84,
+        timeSignature: '4/4',
+        keySignature: 'C',
+        toneMode: 'electric_finger',
+        notes: [
+          { midi: 36, durationBeats: 1, stringNum: 3, fret: 3, technique: 'staccato' },
+          { midi: 36, durationBeats: 1, stringNum: 3, fret: 3, technique: 'staccato' },
+          { midi: 40, durationBeats: 1, stringNum: 2, fret: 2, technique: 'staccato' },
+          { midi: 43, durationBeats: 1, stringNum: 2, fret: 5, technique: 'staccato' },
+        ],
+      },
+      {
+        stepNumber: 2,
+        title: 'Paso 2: Palm Mute vintage con pulgar junto al puente',
+        explanation:
+          'Apoya el canto externo de la palma sobre las selletas del puente y pulsa con la yema del pulgar para lograr ese timbre cálido, grueso y corto clásico.',
+        visualCue: 'Palma en puente + pulgar pulsando suave en Mi y La',
+        bpm: 92,
+        timeSignature: '4/4',
+        keySignature: 'G',
+        toneMode: 'electric_finger',
+        notes: [
+          { midi: 31, durationBeats: 1, stringNum: 4, fret: 3, technique: 'staccato', chordSymbol: 'G' },
+          { midi: 35, durationBeats: 0.5, stringNum: 3, fret: 2, technique: 'staccato' },
+          { midi: 38, durationBeats: 0.5, stringNum: 3, fret: 5, technique: 'staccato' },
+          { midi: 31, durationBeats: 1, stringNum: 4, fret: 3, technique: 'staccato' },
+          { midi: 38, durationBeats: 1, stringNum: 3, fret: 5, technique: 'staccato' },
+        ],
+      },
+      {
+        stepNumber: 3,
+        title: 'Paso 3: Contraste dinámico Legato vs. Staccato (Groove)',
+        explanation:
+          'Combina notas sostenidas (accent) en el tiempo 1 con corcheas staccato cortas en los tiempos 2, 3 y 4 para lograr un groove elástico.',
+        visualCue: 'Tiempo 1 largo -> cortes secos en corcheas siguientes',
+        bpm: 100,
+        timeSignature: '4/4',
+        keySignature: 'E',
+        toneMode: 'electric_finger',
+        notes: [
+          { midi: 28, durationBeats: 1, stringNum: 4, fret: 0, technique: 'accent', chordSymbol: 'Em7' },
+          { midi: 31, durationBeats: 0.5, stringNum: 4, fret: 3, technique: 'staccato' },
+          { midi: 33, durationBeats: 0.5, stringNum: 3, fret: 0, technique: 'staccato' },
+          { midi: 35, durationBeats: 1, stringNum: 3, fret: 2, technique: 'staccato' },
+          { midi: 38, durationBeats: 0.5, stringNum: 2, fret: 0, technique: 'accent' },
+          { midi: 35, durationBeats: 0.5, stringNum: 3, fret: 2, technique: 'staccato' },
+        ],
+      },
+    ],
+  },
+  {
     id: 'tech-left-hand',
     title: 'Mano Izquierda: 1-Dedo-por-Traste y Método Simandl',
     category: 'Mano Izquierda',
     level: 'Principiante',
-    imageUrl: '/src/assets/images/bass_left_hand_simandl_1794916420218.jpg',
-    imageAlt: 'Postura correcta de mano izquierda curvada con un dedo por traste sobre el diapasón de palosanto',
+    imageUrl: '/src/assets/images/diagram_left_hand_simandl_1794953264127.jpg',
+    imageAlt: 'Diagrama ilustrativo de postura de mano izquierda curvada con pulgar centrado y yemas detrás del traste',
+    diagramCallouts: [
+      { color: 'amber', label: 'Puntos de presión exactos detrás de la varilla metálica y muñeca recta' },
+      { color: 'sky', label: 'Arco natural de los dedos 1–4 paralelo a los trastes' },
+    ],
     summary:
       'Domina los dos sistemas esenciales de digitación del bajista profesional: el sistema Simandl (1-2-4, heredado del contrabajo para los trastes graves 1–4 sin tensión) y el sistema 1-Dedo-por-Traste (1-2-3-4) a partir del traste 5.',
     anatomyPoints: [
@@ -321,8 +427,12 @@ export const TECHNIQUE_GUIDES: TechniqueGuide[] = [
     title: 'El Blues: 12 Compases, Shuffle, Box Pattern y Blue Note',
     category: 'Estilos y Grooves',
     level: 'Principiante',
-    imageUrl: '/src/assets/images/bass_studio_styles_1794916421456.jpg',
-    imageAlt: 'Bajos Precision y Jazz Bass junto a amplificador de válvulas y partituras de blues y rock',
+    imageUrl: '/src/assets/images/diagram_blues_shuffle_1794953265570.jpg',
+    imageAlt: 'Diagrama ilustrativo de postura de Blues mostrando caja en mano izquierda y ataque sobre pastilla Precision',
+    diagramCallouts: [
+      { color: 'amber', label: 'Tónica con dedo 2 (ancla de la caja) y ataque relajado en mano derecha' },
+      { color: 'sky', label: 'Geometría transportable de la caja de Blues 1–3–5–6–b7 sobre el mástil' },
+    ],
     summary:
       'El ADN del bajo moderno basado en "Blues Bass" de Ed Friedland. Aprende la estructura I–IV–V de 12 compases, la sensación ternaria del Shuffle (corcheas atresilladas), la caja movible (Box Pattern 1–3–5–6–b7) y el uso cromático de la Nota de Blues (b5).',
     anatomyPoints: [
@@ -413,8 +523,12 @@ export const TECHNIQUE_GUIDES: TechniqueGuide[] = [
     title: 'Rock & Roll: Boogie 1-3-5-6, Walkups y Driving 8ths',
     category: 'Estilos y Grooves',
     level: 'Principiante',
-    imageUrl: '/src/assets/images/bass_studio_styles_1794916421456.jpg',
-    imageAlt: 'Estética vintage de Rock & Roll con bajo eléctrico clásico y amplificador de tubos',
+    imageUrl: '/src/assets/images/diagram_rock_pick_driving_1794953265112.jpg',
+    imageAlt: 'Diagrama ilustrativo de postura para Rock and Roll con agarre correcto de púa y pivote de muñeca',
+    diagramCallouts: [
+      { color: 'amber', label: 'Ataque alternado abajo–arriba constante (Driving 8ths) sobre la cuerda' },
+      { color: 'sky', label: 'Ángulo de sujeción de la púa y eje de rotación relajado de la muñeca' },
+    ],
     summary:
       'Desde Elvis Presley (Bill Black) y Chuck Berry hasta The Beatles (Paul McCartney) y AC/DC. Combina líneas caminantes en negras Boogie, corcheas constantes con púa o dedos ("Driving 8ths") y aproximaciones cromáticas entre acordes.',
     anatomyPoints: [
@@ -506,8 +620,12 @@ export const TECHNIQUE_GUIDES: TechniqueGuide[] = [
     title: 'Reggae y Roots: One Drop, Silencios y Subgrave',
     category: 'Estilos y Grooves',
     level: 'Intermedio',
-    imageUrl: '/src/assets/images/bass_floating_thumb_1794916419496.jpg',
-    imageAlt: 'Posición de mano derecha junto al mástil para lograr el timbre profundo y redondo del Reggae',
+    imageUrl: '/src/assets/images/diagram_reggae_subgrave_1794953266450.jpg',
+    imageAlt: 'Diagrama ilustrativo de postura de Reggae pulsando sobre el extremo del mástil para máximo subgrave',
+    diagramCallouts: [
+      { color: 'amber', label: 'Pulsación suave directamente sobre los últimos trastes del diapasón' },
+      { color: 'sky', label: 'Proyección de onda subgrave cálida y redonda sin brillo metálico' },
+    ],
     summary:
       'Basado en "Reggae Bass" de Ed Friedland. En el Reggae el bajo ES el instrumento melódico principal: los silencios pesan tanto como las notas, se omite a menudo el tiempo 1 y el ataque se desplaza sobre el final del diapasón para sacar puro subgrave.',
     anatomyPoints: [
@@ -594,8 +712,12 @@ export const TECHNIQUE_GUIDES: TechniqueGuide[] = [
     title: 'La Cumbia: Tríada 1-3-5, Corte Staccato, Tumbao y Sonidera',
     category: 'Estilos y Grooves',
     level: 'Principiante',
-    imageUrl: '/src/assets/images/bass_studio_styles_1794916421456.jpg',
-    imageAlt: 'Bajo eléctrico preparado para interpretar grooves de música latina y cumbia tradicional',
+    imageUrl: '/src/assets/images/diagram_cumbia_latin_1794953268292.jpg',
+    imageAlt: 'Diagrama ilustrativo de postura para Cumbia mostrando alternancia firme derecha y corte staccato izquierdo',
+    diagramCallouts: [
+      { color: 'amber', label: 'Alternancia rítmica i–m cerca de la pastilla del mástil con pegada firme' },
+      { color: 'sky', label: 'Corte seco de mano izquierda sobre la tríada 1–3–5' },
+    ],
     summary:
       'El pulso más bailable de Latinoamérica en compás binario (2/4 o 4/4). Aprende desde el patrón tradicional en tríada (Tónica – 3ª – 5ª con corchea y dos semicorcheas o tresillo suave) hasta los cortes staccato, el tumbao colombiano y la cumbia sonidera moderna.',
     anatomyPoints: [
@@ -691,8 +813,12 @@ export const TECHNIQUE_GUIDES: TechniqueGuide[] = [
     title: 'Bajo Acústico, Contrabajo y Fretless',
     category: 'Acústico y Fretless',
     level: 'Intermedio',
-    imageUrl: '/src/assets/images/bass_acoustic_upright_1794916420773.jpg',
-    imageAlt: 'Ejecución técnica en bajo acústico y contrabajo con postura vertical del brazo derecho',
+    imageUrl: '/src/assets/images/diagram_acoustic_upright_1794953285840.jpg',
+    imageAlt: 'Diagrama ilustrativo de postura de pizzicato vertical en bajo acústico y contrabajo',
+    diagramCallouts: [
+      { color: 'amber', label: 'Tracción lateral paralela a la tapa usando toda la yema del dedo' },
+      { color: 'sky', label: 'Anclaje firme del pulgar en el borde lateral del diapasón de ébano' },
+    ],
     summary:
       'Domina las sutilezas acústicas: la proyección natural en bajos acústicos (sin amplificación excesiva), la técnica vertical del pizzicato en contrabajo y la afinación precisa con "mwah" expresivo en bajos sin trastes (Fretless).',
     anatomyPoints: [

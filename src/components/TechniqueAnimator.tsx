@@ -116,6 +116,9 @@ export const TechniqueAnimator: React.FC<TechniqueAnimatorProps> = ({ preset, st
     if (preset === 'upright') {
       return 34; // Side of fingerboard anchor
     }
+    if (preset === 'staccato_muting') {
+      return 126; // Bridge/palm mute anchor
+    }
     return 142; // Pickup rest
   }, [activePos, preset]);
 
@@ -134,6 +137,7 @@ export const TechniqueAnimator: React.FC<TechniqueAnimatorProps> = ({ preset, st
         ? 'Pulgar en pastilla · Pulsando cuerda E (4ª)'
         : `Pulgar muteando cuerda ${STRING_LABELS[Math.min(3, activePos.stringIndex + 1)]}`;
     }
+    if (preset === 'staccato_muting') return 'Palm Mute / Relajación izquierda inmediata';
     if (preset === 'rocknroll') return 'Púa / Ataque firme alternado (i–m)';
     if (preset === 'reggae') return 'Pulsación profunda sobre los últimos trastes';
     if (preset === 'cumbia') return 'Ataque rítmico firme + corte limpio';

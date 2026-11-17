@@ -10,10 +10,47 @@ export const SCALES_AND_MODES: ScaleOrModeDef[] = [
     intervals: ['1', '2', '3', '4', '5', '6', '7'],
     formula: 'T - T - ST - T - T - T - ST',
     characteristicNote: '4ª justa y 7ª mayor',
+    shapes: [
+      {
+        id: 'maj-shape-1',
+        name: 'Caja 1 · Posición Cerrada (Dedo 2 en Tónica)',
+        description:
+          'La forma estándar más ergonómica para el bajo: comienza con el dedo 2 (medio) en la tónica sobre la cuerda E o A para cubrir 4 trastes sin desplazar la mano.',
+        anchorStringFromBottom: 0,
+        points: [
+          { stringFromBottom: 0, fretOffset: 0, finger: '2', interval: 'R', isRoot: true },
+          { stringFromBottom: 0, fretOffset: 2, finger: '4', interval: '2' },
+          { stringFromBottom: 1, fretOffset: -1, finger: '1', interval: '3' },
+          { stringFromBottom: 1, fretOffset: 0, finger: '2', interval: '4' },
+          { stringFromBottom: 1, fretOffset: 2, finger: '4', interval: '5' },
+          { stringFromBottom: 2, fretOffset: -1, finger: '1', interval: '6' },
+          { stringFromBottom: 2, fretOffset: 1, finger: '3', interval: '7' },
+          { stringFromBottom: 2, fretOffset: 2, finger: '4', interval: 'R', isRoot: true },
+        ],
+      },
+      {
+        id: 'maj-shape-2',
+        name: 'Caja 2 · Extensión Diagonal (2 Notas / 3 Notas por Cuerda)',
+        description:
+          'Permite subir una octava y media desplazando el dedo 1 dos trastes arriba en la cuerda D. Ideal para fills rápidos y líneas melódicas.',
+        anchorStringFromBottom: 0,
+        points: [
+          { stringFromBottom: 0, fretOffset: 0, finger: '1', interval: 'R', isRoot: true },
+          { stringFromBottom: 0, fretOffset: 2, finger: '2', interval: '2' },
+          { stringFromBottom: 0, fretOffset: 4, finger: '4', interval: '3' },
+          { stringFromBottom: 1, fretOffset: 0, finger: '1', interval: '4' },
+          { stringFromBottom: 1, fretOffset: 2, finger: '3', interval: '5' },
+          { stringFromBottom: 1, fretOffset: 4, finger: '4', interval: '6' },
+          { stringFromBottom: 2, fretOffset: 1, finger: '1', interval: '7' },
+          { stringFromBottom: 2, fretOffset: 2, finger: '2', interval: 'R', isRoot: true },
+        ],
+      },
+    ],
     genres: ['Pop', 'Country', 'Rock', 'Motown', 'Bossa Nova'],
     artists: ['The Beatles', 'The Beach Boys', 'Marvin Gaye'],
     albums: ['Sgt. Pepper’s Lonely Hearts Club Band', 'Pet Sounds', 'What’s Going On'],
-    usageTip: 'Base de la armonía tonal occidental. En el bajo destaca el movimiento de tónica, quinta y notas de paso diatónicas hacia el siguiente acorde.',
+    usageTip:
+      'Base de la armonía tonal occidental. En el bajo destaca el movimiento de tónica, quinta y notas de paso diatónicas hacia el siguiente acorde.',
   },
   {
     id: 'scale-natural-minor',
@@ -24,10 +61,30 @@ export const SCALES_AND_MODES: ScaleOrModeDef[] = [
     intervals: ['1', '2', 'b3', '4', '5', 'b6', 'b7'],
     formula: 'T - ST - T - T - ST - T - T',
     characteristicNote: 'b6ª menor y b3ª menor',
+    shapes: [
+      {
+        id: 'min-shape-1',
+        name: 'Caja 1 · Posición Estándar (Dedo 1 en Tónica)',
+        description:
+          'Arranca con el dedo 1 (índice) en la tónica. Usa 1-3-4 en las dos primeras cuerdas y 1-3-4 en la tercera para memorizarla de inmediato.',
+        anchorStringFromBottom: 0,
+        points: [
+          { stringFromBottom: 0, fretOffset: 0, finger: '1', interval: 'R', isRoot: true },
+          { stringFromBottom: 0, fretOffset: 2, finger: '3', interval: '2' },
+          { stringFromBottom: 0, fretOffset: 3, finger: '4', interval: 'b3' },
+          { stringFromBottom: 1, fretOffset: 0, finger: '1', interval: '4' },
+          { stringFromBottom: 1, fretOffset: 2, finger: '3', interval: '5' },
+          { stringFromBottom: 1, fretOffset: 3, finger: '4', interval: 'b6' },
+          { stringFromBottom: 2, fretOffset: 0, finger: '1', interval: 'b7' },
+          { stringFromBottom: 2, fretOffset: 2, finger: '3', interval: 'R', isRoot: true },
+        ],
+      },
+    ],
     genres: ['Rock', 'Heavy Metal', 'Pop', 'Reggae', 'Blues Menor'],
     artists: ['Iron Maiden', 'Black Sabbath', 'Bob Marley & The Wailers'],
     albums: ['The Number of the Beast', 'Paranoid', 'Exodus'],
-    usageTip: 'Esencial para riffs épicos en Heavy Metal, líneas de Roots Reggae y baladas menores. La b6 aporta tensión dramática hacia la 5ª.',
+    usageTip:
+      'Esencial para riffs épicos en Heavy Metal, líneas de Roots Reggae y baladas menores. La b6 aporta tensión dramática hacia la 5ª.',
   },
   {
     id: 'scale-harmonic-minor',
@@ -38,10 +95,30 @@ export const SCALES_AND_MODES: ScaleOrModeDef[] = [
     intervals: ['1', '2', 'b3', '4', '5', 'b6', '7'],
     formula: 'T - ST - T - T - ST - 1½T - ST',
     characteristicNote: '7ª mayor sobre tríada menor (b6 -> 7)',
+    shapes: [
+      {
+        id: 'hmin-shape-1',
+        name: 'Caja 1 · Posición Menor Armónica',
+        description:
+          'Idéntica a la Menor Natural salvo que la 7ª sube medio tono (traste +1 respecto a la tónica en la cuerda D).',
+        anchorStringFromBottom: 0,
+        points: [
+          { stringFromBottom: 0, fretOffset: 0, finger: '1', interval: 'R', isRoot: true },
+          { stringFromBottom: 0, fretOffset: 2, finger: '3', interval: '2' },
+          { stringFromBottom: 0, fretOffset: 3, finger: '4', interval: 'b3' },
+          { stringFromBottom: 1, fretOffset: 0, finger: '1', interval: '4' },
+          { stringFromBottom: 1, fretOffset: 2, finger: '3', interval: '5' },
+          { stringFromBottom: 1, fretOffset: 3, finger: '4', interval: 'b6' },
+          { stringFromBottom: 2, fretOffset: 1, finger: '2', interval: '7' },
+          { stringFromBottom: 2, fretOffset: 2, finger: '3', interval: 'R', isRoot: true },
+        ],
+      },
+    ],
     genres: ['Metal Neoclásico', 'Salsa', 'Jazz', 'Música Latina'],
     artists: ['Symphony X', 'Fania All-Stars', 'Chick Corea'],
     albums: ['The Divine Wings of Tragedy', 'Live at Yankee Stadium', 'Spain'],
-    usageTip: 'Crea una sonoridad intensa y exótica gracias al salto de segunda aumentada entre la b6 y la 7ª sensible. Muy efectiva sobre acordes V7 en tonalidad menor.',
+    usageTip:
+      'Crea una sonoridad intensa y exótica gracias al salto de segunda aumentada entre la b6 y la 7ª sensible. Muy efectiva sobre acordes V7 en tonalidad menor.',
   },
   {
     id: 'scale-melodic-minor',
@@ -52,10 +129,224 @@ export const SCALES_AND_MODES: ScaleOrModeDef[] = [
     intervals: ['1', '2', 'b3', '4', '5', '6', '7'],
     formula: 'T - ST - T - T - T - T - ST',
     characteristicNote: 'b3ª menor con 6ª y 7ª mayores',
+    shapes: [
+      {
+        id: 'mmin-shape-1',
+        name: 'Caja 1 · Jazz Minor (Dedo 2 o 1 en Tónica)',
+        description:
+          'Solo cambia una nota respecto a la Escala Mayor: la 3ª se baja un semitono (b3). Perfecta para m(Maj7).',
+        anchorStringFromBottom: 0,
+        points: [
+          { stringFromBottom: 0, fretOffset: 0, finger: '2', interval: 'R', isRoot: true },
+          { stringFromBottom: 0, fretOffset: 2, finger: '4', interval: '2' },
+          { stringFromBottom: 1, fretOffset: -2, finger: '1', interval: 'b3' },
+          { stringFromBottom: 1, fretOffset: 0, finger: '2', interval: '4' },
+          { stringFromBottom: 1, fretOffset: 2, finger: '4', interval: '5' },
+          { stringFromBottom: 2, fretOffset: -1, finger: '1', interval: '6' },
+          { stringFromBottom: 2, fretOffset: 1, finger: '3', interval: '7' },
+          { stringFromBottom: 2, fretOffset: 2, finger: '4', interval: 'R', isRoot: true },
+        ],
+      },
+    ],
     genres: ['Jazz', 'Jazz Fusion', 'Progressive Rock'],
     artists: ['Jaco Pastorius', 'Weather Report', 'John Patitucci'],
     albums: ['Jaco Pastorius', 'Heavy Weather', 'John Patitucci'],
-    usageTip: 'Es la escala madre de los modos alterados en Jazz moderno (Lidio b7, Superlocrio). Excelente sobre acordes m(maj7) y tónicas menores en Fusion.',
+    usageTip:
+      'Es la escala madre de los modos alterados en Jazz moderno (Lidio b7, Superlocrio). Excelente sobre acordes m(maj7) y tónicas menores en Fusion.',
+  },
+  {
+    id: 'scale-pentatonic-minor',
+    nameEs: 'Pentatónica Menor',
+    nameIntl: 'Minor Pentatonic',
+    category: 'Pentatónicas y Blues',
+    semitones: [0, 3, 5, 7, 10],
+    intervals: ['1', 'b3', '4', '5', 'b7'],
+    formula: '1½T - T - T - 1½T - T',
+    characteristicNote: 'b3 y b7 sobre esqueleto de 4ª y 5ª',
+    shapes: [
+      {
+        id: 'pmin-shape-1',
+        name: 'Caja 1 · La Caja Maestra del Bajo (Dedo 1 en Tónica)',
+        description:
+          'La forma más utilizada en Rock, Funk, Blues y Reggae: 2 notas por cuerda formando un rectángulo limpio con dedos 1 y 4/3.',
+        anchorStringFromBottom: 0,
+        points: [
+          { stringFromBottom: 0, fretOffset: 0, finger: '1', interval: 'R', isRoot: true },
+          { stringFromBottom: 0, fretOffset: 3, finger: '4', interval: 'b3' },
+          { stringFromBottom: 1, fretOffset: 0, finger: '1', interval: '4' },
+          { stringFromBottom: 1, fretOffset: 2, finger: '3', interval: '5' },
+          { stringFromBottom: 2, fretOffset: 0, finger: '1', interval: 'b7' },
+          { stringFromBottom: 2, fretOffset: 2, finger: '3', interval: 'R', isRoot: true },
+          { stringFromBottom: 3, fretOffset: 0, finger: '1', interval: 'b3' },
+          { stringFromBottom: 3, fretOffset: 2, finger: '3', interval: '4' },
+        ],
+      },
+      {
+        id: 'pmin-shape-2',
+        name: 'Caja 2 · Extensión Superior (b7 grave a 5ª aguda)',
+        description:
+          'Conecta la caja principal hacia los trastes agudos permitiendo slides expresivos de la 4ª a la 5ª y regreso a la octava.',
+        anchorStringFromBottom: 0,
+        points: [
+          { stringFromBottom: 0, fretOffset: 3, finger: '1', interval: 'b3' },
+          { stringFromBottom: 0, fretOffset: 5, finger: '3', interval: '4' },
+          { stringFromBottom: 1, fretOffset: 2, finger: '1', interval: '5' },
+          { stringFromBottom: 1, fretOffset: 5, finger: '4', interval: 'b7' },
+          { stringFromBottom: 2, fretOffset: 2, finger: '1', interval: 'R', isRoot: true },
+          { stringFromBottom: 2, fretOffset: 5, finger: '4', interval: 'b3' },
+          { stringFromBottom: 3, fretOffset: 2, finger: '1', interval: '4' },
+          { stringFromBottom: 3, fretOffset: 4, finger: '3', interval: '5' },
+        ],
+      },
+    ],
+    genres: ['Rock', 'Blues', 'Funk', 'Hard Rock', 'Reggae'],
+    artists: ['Cream', 'Black Sabbath', 'Red Hot Chili Peppers', 'Led Zeppelin'],
+    albums: ['Disraeli Gears', 'Paranoid', 'Blood Sugar Sex Magik', 'Led Zeppelin IV'],
+    usageTip:
+      'La caja fundamental del bajo moderno. Abarca riffs contundentes, slap bass y líneas de Rock pesado con máxima pegada rítmica.',
+  },
+  {
+    id: 'scale-pentatonic-major',
+    nameEs: 'Pentatónica Mayor',
+    nameIntl: 'Major Pentatonic',
+    category: 'Pentatónicas y Blues',
+    semitones: [0, 2, 4, 7, 9],
+    intervals: ['1', '2', '3', '5', '6'],
+    formula: 'T - T - 1½T - T - 1½T',
+    characteristicNote: 'Ausencia de semitonos (sin 4ª ni 7ª)',
+    shapes: [
+      {
+        id: 'pmaj-shape-1',
+        name: 'Caja 1 · Forma Motown / Country (Dedo 2 en Tónica)',
+        description:
+          'Comienza con dedo 2 en la tónica. Forma una caja compacta que enlaza al instante tónica, 2ª, 3ª mayor, 5ª y 6ª (el sonido “My Girl”).',
+        anchorStringFromBottom: 0,
+        points: [
+          { stringFromBottom: 0, fretOffset: 0, finger: '2', interval: 'R', isRoot: true },
+          { stringFromBottom: 0, fretOffset: 2, finger: '4', interval: '2' },
+          { stringFromBottom: 1, fretOffset: -1, finger: '1', interval: '3' },
+          { stringFromBottom: 1, fretOffset: 2, finger: '4', interval: '5' },
+          { stringFromBottom: 2, fretOffset: -1, finger: '1', interval: '6' },
+          { stringFromBottom: 2, fretOffset: 2, finger: '4', interval: 'R', isRoot: true },
+          { stringFromBottom: 3, fretOffset: -1, finger: '1', interval: '2' },
+          { stringFromBottom: 3, fretOffset: 1, finger: '3', interval: '3' },
+        ],
+      },
+      {
+        id: 'pmaj-shape-2',
+        name: 'Caja 2 · Forma Extendida (Dedo 1 en Tónica)',
+        description:
+          'Desliza desde la 2ª hacia la 3ª mayor en la misma cuerda usando dedos 1-3 para un fraseo cantable tipo Soul y Pop.',
+        anchorStringFromBottom: 0,
+        points: [
+          { stringFromBottom: 0, fretOffset: 0, finger: '1', interval: 'R', isRoot: true },
+          { stringFromBottom: 0, fretOffset: 2, finger: '3', interval: '2' },
+          { stringFromBottom: 0, fretOffset: 4, finger: '4', interval: '3' },
+          { stringFromBottom: 1, fretOffset: 2, finger: '1', interval: '5' },
+          { stringFromBottom: 1, fretOffset: 4, finger: '3', interval: '6' },
+          { stringFromBottom: 2, fretOffset: 2, finger: '1', interval: 'R', isRoot: true },
+          { stringFromBottom: 2, fretOffset: 4, finger: '3', interval: '2' },
+          { stringFromBottom: 3, fretOffset: 1, finger: '1', interval: '3' },
+        ],
+      },
+    ],
+    genres: ['Motown', 'Country', 'Pop', 'Rock & Roll', 'Blues'],
+    artists: ['The Temptations', 'The Four Tops', 'Johnny Cash'],
+    albums: ['Hitsville USA', 'With a Lot o’ Soul', 'At Folsom Prison'],
+    usageTip:
+      'La fórmula secreta de los fills de James Jamerson y el Country/Soul. Imposible sonar mal sobre acordes mayores o dominantes.',
+  },
+  {
+    id: 'scale-blues',
+    nameEs: 'Escala de Blues Menor (Hexatónica)',
+    nameIntl: 'Minor Blues Scale',
+    category: 'Pentatónicas y Blues',
+    semitones: [0, 3, 5, 6, 7, 10],
+    intervals: ['1', 'b3', '4', 'b5', '5', 'b7'],
+    formula: 'Pentatónica menor + b5 (Nota de Blues / Tritono)',
+    characteristicNote: 'b5 (Blue Note cromática entre 4ª y 5ª)',
+    blueNoteIndices: [3],
+    blueNoteExplanation:
+      'La Nota de Blues (Blue Note) en la escala de Blues Menor es la 5ª disminuida (b5), ubicada exactamente a medio camino entre la 4ª justa y la 5ª justa (un tritono desde la tónica). Aporta una tensión vocal cruda y melancólica: nunca te quedes parado en ella en tiempos fuertes; úsala como nota de paso rápida o slide directo hacia la 5ª o la 4ª.',
+    shapes: [
+      {
+        id: 'blues-min-shape-1',
+        name: 'Caja 1 · Pentatónica Menor + Nota de Blues (b5)',
+        description:
+          'Es la misma Caja 1 de la Pentatónica Menor añadiendo el dedo 2 en la cuerda A (un traste después de la 4ª) y dedo 4 en la cuerda G. ¡Observa el bloque cromático 4 - b5 - 5!',
+        anchorStringFromBottom: 0,
+        points: [
+          { stringFromBottom: 0, fretOffset: 0, finger: '1', interval: 'R', isRoot: true },
+          { stringFromBottom: 0, fretOffset: 3, finger: '4', interval: 'b3' },
+          { stringFromBottom: 1, fretOffset: 0, finger: '1', interval: '4' },
+          { stringFromBottom: 1, fretOffset: 1, finger: '2', interval: 'b5', isBlueNote: true },
+          { stringFromBottom: 1, fretOffset: 2, finger: '3', interval: '5' },
+          { stringFromBottom: 2, fretOffset: 0, finger: '1', interval: 'b7' },
+          { stringFromBottom: 2, fretOffset: 2, finger: '3', interval: 'R', isRoot: true },
+          { stringFromBottom: 3, fretOffset: 0, finger: '1', interval: 'b3' },
+          { stringFromBottom: 3, fretOffset: 2, finger: '3', interval: '4' },
+          { stringFromBottom: 3, fretOffset: 3, finger: '4', interval: 'b5', isBlueNote: true },
+        ],
+      },
+      {
+        id: 'blues-min-shape-2',
+        name: 'Caja 2 · Posición Diagonal con Hammer-On a la Blue Note',
+        description:
+          'Permite deslizar en la misma cuerda desde la 4ª pasando por la b5 hasta la 5ª justa para lograr fraseos tipo Stevie Ray Vaughan / Cream.',
+        anchorStringFromBottom: 0,
+        points: [
+          { stringFromBottom: 0, fretOffset: 0, finger: '1', interval: 'R', isRoot: true },
+          { stringFromBottom: 0, fretOffset: 3, finger: '3', interval: 'b3' },
+          { stringFromBottom: 0, fretOffset: 5, finger: '4', interval: '4' },
+          { stringFromBottom: 0, fretOffset: 6, finger: '4', interval: 'b5', isBlueNote: true },
+          { stringFromBottom: 1, fretOffset: 2, finger: '1', interval: '5' },
+          { stringFromBottom: 1, fretOffset: 5, finger: '4', interval: 'b7' },
+          { stringFromBottom: 2, fretOffset: 2, finger: '1', interval: 'R', isRoot: true },
+          { stringFromBottom: 2, fretOffset: 5, finger: '4', interval: 'b3' },
+        ],
+      },
+    ],
+    genres: ['Blues', 'Blues Rock', 'Shuffle', 'Funk', 'Hard Rock'],
+    artists: ['Muddy Waters', 'Stevie Ray Vaughan', 'B.B. King', 'ZZ Top'],
+    albums: ['Folk Singer', 'Texas Flood', 'Live at the Regal', 'Tres Hombres'],
+    usageTip:
+      'Usa la b5 como nota de paso rápida o slide hacia la 5ª o 4ª justa. Evita reposar demasiado en la b5 salvo para tensión extrema.',
+  },
+  {
+    id: 'scale-blues-major',
+    nameEs: 'Escala de Blues Mayor',
+    nameIntl: 'Major Blues Scale',
+    category: 'Pentatónicas y Blues',
+    semitones: [0, 2, 3, 4, 7, 9],
+    intervals: ['1', '2', 'b3', '3', '5', '6'],
+    formula: 'Pentatónica mayor + b3 (Nota de Blues entre 2ª y 3ª)',
+    characteristicNote: 'b3 (Blue Note resolviendo hacia 3ª Mayor)',
+    blueNoteIndices: [2],
+    blueNoteExplanation:
+      'En la Escala de Blues Mayor, la Nota de Blues es la 3ª menor (b3) incrustada entre la 2ª mayor y la 3ª mayor. Es el secreto detrás de casi todo el Rock & Roll clásico, Country Blues y Boogie: tocar rápidamente b3 -> 3ª mayor produce el característico sabor alegre pero rasgado del Blues mayor.',
+    shapes: [
+      {
+        id: 'blues-maj-shape-1',
+        name: 'Caja 1 · Blues Mayor (Dedo 2 en Tónica)',
+        description:
+          'Idéntica a la Pentatónica Mayor añadiendo el dedo 1 en la b3 antes de caer en la 3ª mayor, o bien el paso cromático 2 - b3 - 3 en la cuerda A.',
+        anchorStringFromBottom: 0,
+        points: [
+          { stringFromBottom: 0, fretOffset: 0, finger: '2', interval: 'R', isRoot: true },
+          { stringFromBottom: 0, fretOffset: 2, finger: '4', interval: '2' },
+          { stringFromBottom: 1, fretOffset: -2, finger: '1', interval: 'b3', isBlueNote: true },
+          { stringFromBottom: 1, fretOffset: -1, finger: '2', interval: '3' },
+          { stringFromBottom: 1, fretOffset: 2, finger: '4', interval: '5' },
+          { stringFromBottom: 2, fretOffset: -1, finger: '1', interval: '6' },
+          { stringFromBottom: 2, fretOffset: 2, finger: '4', interval: 'R', isRoot: true },
+        ],
+      },
+    ],
+    genres: ['Blues', 'Rock & Roll', 'Country', 'Southern Rock'],
+    artists: ['Chuck Berry', 'The Allman Brothers Band', 'Eric Clapton'],
+    albums: ['Berry Is on Top', 'At Fillmore East', 'Slowhand'],
+    usageTip:
+      'Imprescindible sobre el acorde I7 de un Blues Mayor o un Boogie: haz hammer-on de b3 a 3ª mayor y sube hacia la 5ª y 6ª.',
   },
   {
     id: 'mode-dorian',
@@ -66,10 +357,30 @@ export const SCALES_AND_MODES: ScaleOrModeDef[] = [
     intervals: ['1', '2', 'b3', '4', '5', '6', 'b7'],
     formula: 'T - ST - T - T - T - ST - T (II grado mayor)',
     characteristicNote: '6ª mayor brillante sobre acorde menor',
+    shapes: [
+      {
+        id: 'dorian-shape-1',
+        name: 'Caja 1 · Modo Dórico (Dedo 1 en Tónica)',
+        description:
+          'Solo difiere de la Menor Natural en la 6ª (un traste más arriba con el dedo 4 en la cuerda D, justo debajo de la octava).',
+        anchorStringFromBottom: 0,
+        points: [
+          { stringFromBottom: 0, fretOffset: 0, finger: '1', interval: 'R', isRoot: true },
+          { stringFromBottom: 0, fretOffset: 2, finger: '3', interval: '2' },
+          { stringFromBottom: 0, fretOffset: 3, finger: '4', interval: 'b3' },
+          { stringFromBottom: 1, fretOffset: 0, finger: '1', interval: '4' },
+          { stringFromBottom: 1, fretOffset: 2, finger: '3', interval: '5' },
+          { stringFromBottom: 1, fretOffset: 4, finger: '4', interval: '6' },
+          { stringFromBottom: 2, fretOffset: 0, finger: '1', interval: 'b7' },
+          { stringFromBottom: 2, fretOffset: 2, finger: '3', interval: 'R', isRoot: true },
+        ],
+      },
+    ],
     genres: ['Funk', 'Jazz Modal', 'Rock', 'Afro-Cubano', 'Disco'],
     artists: ['Miles Davis', 'Santana', 'Chic', 'Herbie Hancock'],
     albums: ['Kind of Blue', 'Abraxas', 'C’est Chic', 'Head Hunters'],
-    usageTip: 'El modo favorito del bajista de Funk y Jazz Modal. La 6ª natural rompe la oscuridad del acorde m7 y conecta directo con la b7.',
+    usageTip:
+      'El modo favorito del bajista de Funk y Jazz Modal. La 6ª natural rompe la oscuridad del acorde m7 y conecta directo con la b7.',
   },
   {
     id: 'mode-phrygian',
@@ -83,7 +394,8 @@ export const SCALES_AND_MODES: ScaleOrModeDef[] = [
     genres: ['Metal', 'Thrash Metal', 'Flamenco-Jazz', 'Rock Progresivo'],
     artists: ['Metallica', 'Tool', 'Paco de Lucía Sextet'],
     albums: ['Master of Puppets', 'Lateralus', 'Solo Quiero Caminar'],
-    usageTip: 'El semitono entre tónica y b2 genera tensión agresiva e hipnótica. En Metal suele usarse como riff pedal en la cuerda E o B al aire.',
+    usageTip:
+      'El semitono entre tónica y b2 genera tensión agresiva e hipnótica. En Metal suele usarse como riff pedal en la cuerda E o B al aire.',
   },
   {
     id: 'mode-lydian',
@@ -97,7 +409,8 @@ export const SCALES_AND_MODES: ScaleOrModeDef[] = [
     genres: ['Jazz Fusion', 'Progressive Rock', 'Pop Artístico'],
     artists: ['Jaco Pastorius', 'Rush', 'Steve Vai'],
     albums: ['Word of Mouth', 'Moving Pictures', 'Passion and Warfare'],
-    usageTip: 'Aporta un color abierto, flotante y cinematográfico sobre acordes Maj7(#11). Ideal en fills melódicos en el registro agudo del bajo.',
+    usageTip:
+      'Aporta un color abierto, flotante y cinematográfico sobre acordes Maj7(#11). Ideal en fills melódicos en el registro agudo del bajo.',
   },
   {
     id: 'mode-mixolydian',
@@ -108,10 +421,30 @@ export const SCALES_AND_MODES: ScaleOrModeDef[] = [
     intervals: ['1', '2', '3', '4', '5', '6', 'b7'],
     formula: 'T - T - ST - T - T - ST - T (V grado mayor)',
     characteristicNote: 'b7ª menor sobre tríada mayor',
+    shapes: [
+      {
+        id: 'mixo-shape-1',
+        name: 'Caja 1 · Modo Mixolidio (Dedo 2 en Tónica)',
+        description:
+          'Idéntica a la Escala Mayor pero bajando la 7ª medio tono hacia la b7 (dedo 2 en cuerda D). La forma clave del Funk y Rock dominante.',
+        anchorStringFromBottom: 0,
+        points: [
+          { stringFromBottom: 0, fretOffset: 0, finger: '2', interval: 'R', isRoot: true },
+          { stringFromBottom: 0, fretOffset: 2, finger: '4', interval: '2' },
+          { stringFromBottom: 1, fretOffset: -1, finger: '1', interval: '3' },
+          { stringFromBottom: 1, fretOffset: 0, finger: '2', interval: '4' },
+          { stringFromBottom: 1, fretOffset: 2, finger: '4', interval: '5' },
+          { stringFromBottom: 2, fretOffset: -1, finger: '1', interval: '6' },
+          { stringFromBottom: 2, fretOffset: 0, finger: '2', interval: 'b7' },
+          { stringFromBottom: 2, fretOffset: 2, finger: '4', interval: 'R', isRoot: true },
+        ],
+      },
+    ],
     genres: ['Blues', 'Rock', 'Southern Rock', 'Funk', 'Country'],
     artists: ['The Beatles', 'Led Zeppelin', 'The Allman Brothers Band', 'James Brown'],
     albums: ['Revolver', 'Led Zeppelin II', 'At Fillmore East', 'Star Time'],
-    usageTip: 'El sonido esencial del Rock clásico, el Funk dominante y los acordes de séptima. La b7 permite bajar cromáticamente desde la octava con enorme groove.',
+    usageTip:
+      'El sonido esencial del Rock clásico, el Funk dominante y los acordes de séptima. La b7 permite bajar cromáticamente desde la octava con enorme groove.',
   },
   {
     id: 'mode-locrian',
@@ -125,49 +458,8 @@ export const SCALES_AND_MODES: ScaleOrModeDef[] = [
     genres: ['Jazz', 'Death Metal', 'Metal Progresivo'],
     artists: ['Death', 'Dream Theater', 'Chick Corea'],
     albums: ['Individual Thought Patterns', 'Images and Words', 'Now He Sings, Now He Sobs'],
-    usageTip: 'Escala natural para el acorde m7b5 (II grado de una tonalidad menor). Al carecer de 5ª justa, su sonoridad es inestable y oscura.',
-  },
-  {
-    id: 'scale-pentatonic-major',
-    nameEs: 'Pentatónica Mayor',
-    nameIntl: 'Major Pentatonic',
-    category: 'Pentatónicas y Blues',
-    semitones: [0, 2, 4, 7, 9],
-    intervals: ['1', '2', '3', '5', '6'],
-    formula: 'T - T - 1½T - T - 1½T',
-    characteristicNote: 'Ausencia de semitonos (sin 4ª ni 7ª)',
-    genres: ['Motown', 'Country', 'Pop', 'Rock & Roll', 'Blues'],
-    artists: ['The Temptations', 'The Four Tops', 'Johnny Cash'],
-    albums: ['Hitsville USA', 'With a Lot o’ Soul', 'At Folsom Prison'],
-    usageTip: 'La fórmula secreta de los fills de James Jamerson y el Country/Soul. Imposible sonar mal sobre acordes mayores o dominantes.',
-  },
-  {
-    id: 'scale-pentatonic-minor',
-    nameEs: 'Pentatónica Menor',
-    nameIntl: 'Minor Pentatonic',
-    category: 'Pentatónicas y Blues',
-    semitones: [0, 3, 5, 7, 10],
-    intervals: ['1', 'b3', '4', '5', 'b7'],
-    formula: '1½T - T - T - 1½T - T',
-    characteristicNote: 'b3 y b7 sobre esqueleto de 4ª y 5ª',
-    genres: ['Rock', 'Blues', 'Funk', 'Hard Rock', 'Reggae'],
-    artists: ['Cream', 'Black Sabbath', 'Red Hot Chili Peppers', 'Led Zeppelin'],
-    albums: ['Disraeli Gears', 'Paranoid', 'Blood Sugar Sex Magik', 'Led Zeppelin IV'],
-    usageTip: 'La caja fundamental del bajo moderno. Abarca riffs contundentes, slap bass y líneas de Rock pesado con máxima pegada rítmica.',
-  },
-  {
-    id: 'scale-blues',
-    nameEs: 'Escala de Blues (Hexatónica)',
-    nameIntl: 'Blues Scale',
-    category: 'Pentatónicas y Blues',
-    semitones: [0, 3, 5, 6, 7, 10],
-    intervals: ['1', 'b3', '4', 'b5', '5', 'b7'],
-    formula: 'Pentatónica menor + b5 (Blue Note)',
-    characteristicNote: 'b5 (Blue Note cromática entre 4 y 5)',
-    genres: ['Blues', 'Blues Rock', 'Shuffle', 'Funk', 'Hard Rock'],
-    artists: ['Muddy Waters', 'Stevie Ray Vaughan', 'B.B. King', 'ZZ Top'],
-    albums: ['Folk Singer', 'Texas Flood', 'Live at the Regal', 'Tres Hombres'],
-    usageTip: 'Usa la b5 como nota de paso rápida o slide hacia la 5ª o 4ª justa. Evita reposar demasiado en la b5 salvo para tensión extrema.',
+    usageTip:
+      'Escala natural para el acorde m7b5 (II grado de una tonalidad menor). Al carecer de 5ª justa, su sonoridad es inestable y oscura.',
   },
   {
     id: 'scale-lydian-b7',
@@ -181,7 +473,8 @@ export const SCALES_AND_MODES: ScaleOrModeDef[] = [
     genres: ['Jazz Fusion', 'Bebop', 'Bossa Nova Avanzada'],
     artists: ['Weather Report', 'Jaco Pastorius', 'Herbie Hancock'],
     albums: ['Black Market', 'The Birthday Concert', 'Thrust'],
-    usageTip: 'Escala perfecta para acordes dominantes que no resuelven por cuarta (como IV7 en Blues o bVII7 en cadencia backdoor) y dominantes 7#11.',
+    usageTip:
+      'Escala perfecta para acordes dominantes que no resuelven por cuarta (como IV7 en Blues o bVII7 en cadencia backdoor) y dominantes 7#11.',
   },
   {
     id: 'scale-altered',
@@ -195,7 +488,8 @@ export const SCALES_AND_MODES: ScaleOrModeDef[] = [
     genres: ['Bebop', 'Jazz Moderno', 'Fusion'],
     artists: ['Charlie Parker', 'Paul Chambers', 'Ron Carter', 'John Patitucci'],
     albums: ['Now’s the Time', 'Kind of Blue', 'Maiden Voyage'],
-    usageTip: 'Máxima tensión sobre un acorde V7alt antes de resolver al I grado. Su sonido contiene el tritono guía (3 y b7) más todas las alteraciones posibles.',
+    usageTip:
+      'Máxima tensión sobre un acorde V7alt antes de resolver al I grado. Su sonido contiene el tritono guía (3 y b7) más todas las alteraciones posibles.',
   },
   {
     id: 'scale-diminished-hw',
@@ -209,7 +503,8 @@ export const SCALES_AND_MODES: ScaleOrModeDef[] = [
     genres: ['Jazz', 'Fusion', 'Metal Progresivo'],
     artists: ['Alain Caron', 'Michael Brecker', 'Meshuggah'],
     albums: ['Rhythm ’n Jazz', 'Tales from the Hudson', 'Chaosphere'],
-    usageTip: 'Escala de 8 notas ideal para dominantes V7(b9, 13) y patrones simétricos desplazables cada 3 trastes (terceras menores).',
+    usageTip:
+      'Escala de 8 notas ideal para dominantes V7(b9, 13) y patrones simétricos desplazables cada 3 trastes (terceras menores).',
   },
   {
     id: 'scale-whole-tone',
@@ -223,7 +518,8 @@ export const SCALES_AND_MODES: ScaleOrModeDef[] = [
     genres: ['Jazz', 'Impresionismo', 'Rock Progresivo'],
     artists: ['Thelonious Monk', 'King Crimson', 'Wayne Shorter'],
     albums: ['Brilliant Corners', 'Larks’ Tongues in Aspic', 'Speak No Evil'],
-    usageTip: 'Crea un efecto onírico y suspendido sobre acordes 7#5 o aumentados. En el mástil se repite idéntica cada 2 trastes.',
+    usageTip:
+      'Crea un efecto onírico y suspendido sobre acordes 7#5 o aumentados. En el mástil se repite idéntica cada 2 trastes.',
   },
 ];
 
@@ -236,10 +532,39 @@ export const CHORDS_LIBRARY: ChordDef[] = [
     semitones: [0, 4, 7],
     intervals: ['1', '3', '5'],
     formula: 'Tónica + 3ª Mayor + 5ª Justa',
-    genres: ['Rock & Roll', 'Country', 'Pop', 'Blues', 'Ska'],
-    artists: ['Chuck Berry', 'The Beatles', 'The Skatalites'],
+    shapes: [
+      {
+        id: 'ch-maj-1',
+        name: 'Shape 1 · Tríada Mayor Cerrada (Dedo 2 en Tónica)',
+        description:
+          'Tónica con dedo 2, 3ª mayor con dedo 1 en la cuerda siguiente, 5ª justa con dedo 4 (y octava debajo con dedo 4 en cuerda D). Base de la Cumbia y Country.',
+        anchorStringFromBottom: 0,
+        points: [
+          { stringFromBottom: 0, fretOffset: 0, finger: '2', interval: 'R', isRoot: true },
+          { stringFromBottom: 1, fretOffset: -1, finger: '1', interval: '3' },
+          { stringFromBottom: 1, fretOffset: 2, finger: '4', interval: '5' },
+          { stringFromBottom: 2, fretOffset: 2, finger: '4', interval: 'R', isRoot: true },
+        ],
+      },
+      {
+        id: 'ch-maj-2',
+        name: 'Shape 2 · Tríada Mayor Abierta (5ª grave)',
+        description:
+          'Permite alternar rápidamente la tónica con la 5ª justa en la cuerda inferior (el clásico salto 1-5 de Country, Polka y Cumbia).',
+        anchorStringFromBottom: 1,
+        points: [
+          { stringFromBottom: 0, fretOffset: 0, finger: '2', interval: '5' },
+          { stringFromBottom: 1, fretOffset: 0, finger: '2', interval: 'R', isRoot: true },
+          { stringFromBottom: 2, fretOffset: -1, finger: '1', interval: '3' },
+          { stringFromBottom: 2, fretOffset: 2, finger: '4', interval: '5' },
+        ],
+      },
+    ],
+    genres: ['Rock & Roll', 'Country', 'Pop', 'Cumbia', 'Ska'],
+    artists: ['Chuck Berry', 'The Beatles', 'The Skatalites', 'Los Ángeles Azules'],
     albums: ['The Great Twenty-Eight', 'Abbey Road', 'Ska Boo-Da-Ba'],
-    bassApplication: 'El cimiento absoluto del bajo: alterna 1 y 5 en Country/Ska o arpegia 1-3-5-6 en Rock ’n’ Roll y Boogie.',
+    bassApplication:
+      'El cimiento absoluto del bajo: alterna 1 y 5 en Country/Ska o arpegia 1-3-5 en Cumbia y Rock ’n’ Roll.',
   },
   {
     id: 'chord-min',
@@ -249,10 +574,26 @@ export const CHORDS_LIBRARY: ChordDef[] = [
     semitones: [0, 3, 7],
     intervals: ['1', 'b3', '5'],
     formula: 'Tónica + 3ª Menor + 5ª Justa',
-    genres: ['Reggae', 'Rock', 'Metal', 'Salsa', 'Pop'],
+    shapes: [
+      {
+        id: 'ch-min-1',
+        name: 'Shape 1 · Tríada Menor Estándar (Dedo 1 en Tónica)',
+        description:
+          'Tónica con dedo 1, b3 en la misma cuerda (dedo 4, 3 trastes arriba) o en la cuerda superior (-2 trastes), y 5ª justa con dedo 3 en la cuerda siguiente.',
+        anchorStringFromBottom: 0,
+        points: [
+          { stringFromBottom: 0, fretOffset: 0, finger: '1', interval: 'R', isRoot: true },
+          { stringFromBottom: 0, fretOffset: 3, finger: '4', interval: 'b3' },
+          { stringFromBottom: 1, fretOffset: 2, finger: '3', interval: '5' },
+          { stringFromBottom: 2, fretOffset: 2, finger: '3', interval: 'R', isRoot: true },
+        ],
+      },
+    ],
+    genres: ['Reggae', 'Rock', 'Metal', 'Salsa', 'Cumbia'],
     artists: ['Bob Marley', 'Pink Floyd', 'Black Sabbath'],
     albums: ['Catch a Fire', 'Dark Side of the Moon', 'Master of Reality'],
-    bassApplication: 'Define inmediatamente el color menor al tocar la b3 (3 semitonos desde la tónica). Esencial en drop-lines de Reggae y Tumbao menor.',
+    bassApplication:
+      'Define inmediatamente el color menor al tocar la b3 (3 semitonos desde la tónica). Esencial en drop-lines de Reggae y Tumbao menor.',
   },
   {
     id: 'chord-dim',
@@ -262,10 +603,25 @@ export const CHORDS_LIBRARY: ChordDef[] = [
     semitones: [0, 3, 6],
     intervals: ['1', 'b3', 'b5'],
     formula: 'Tónica + 3ª Menor + 5ª Disminuida',
+    shapes: [
+      {
+        id: 'ch-dim-1',
+        name: 'Shape 1 · Tríada Disminuida (1 - b3 - b5)',
+        description:
+          'Forma simétrica compacta: tónica dedo 1, b3 dedo 4 en la misma cuerda, b5 dedo 2 en la cuerda siguiente.',
+        anchorStringFromBottom: 0,
+        points: [
+          { stringFromBottom: 0, fretOffset: 0, finger: '1', interval: 'R', isRoot: true },
+          { stringFromBottom: 0, fretOffset: 3, finger: '4', interval: 'b3' },
+          { stringFromBottom: 1, fretOffset: 1, finger: '2', interval: 'b5' },
+        ],
+      },
+    ],
     genres: ['Jazz', 'Metal', 'Rock Progresivo', 'Gospel'],
     artists: ['Yes', 'Dream Theater', 'Ray Brown'],
     albums: ['Fragile', 'Metropolis Pt. 2', 'Soular Energy'],
-    bassApplication: 'Muy empleada como acorde de paso cromático ascendente (#I°7, #IV°7) en Walking Bass y líneas de Gospel/Motown.',
+    bassApplication:
+      'Muy empleada como acorde de paso cromático ascendente (#I°7, #IV°7) en Walking Bass y líneas de Gospel/Motown.',
   },
   {
     id: 'chord-aug',
@@ -278,7 +634,8 @@ export const CHORDS_LIBRARY: ChordDef[] = [
     genres: ['Jazz', 'Rock Clásico', 'Música Latina'],
     artists: ['Stevie Wonder', 'The Beatles', 'Tito Puente'],
     albums: ['Songs in the Key of Life', 'Help!', 'Dance Mania'],
-    bassApplication: 'Genera impulso hacia el IV grado o hacia un acorde menor relativo usando la #5 como nota de enlace.',
+    bassApplication:
+      'Genera impulso hacia el IV grado o hacia un acorde menor relativo usando la #5 como nota de enlace.',
   },
   {
     id: 'chord-maj7',
@@ -288,10 +645,27 @@ export const CHORDS_LIBRARY: ChordDef[] = [
     semitones: [0, 4, 7, 11],
     intervals: ['1', '3', '5', '7'],
     formula: 'Tónica + 3 + 5 + 7 Mayor',
+    shapes: [
+      {
+        id: 'ch-maj7-1',
+        name: 'Shape 1 · Arpegio Maj7 (Dedo 2 en Tónica)',
+        description:
+          'Caja de 4 trastes que engloba tónica (2), 3ª mayor (1), 5ª justa (4) y 7ª mayor (3). Súper limpia para Bossa Nova y Walking Bass.',
+        anchorStringFromBottom: 0,
+        points: [
+          { stringFromBottom: 0, fretOffset: 0, finger: '2', interval: 'R', isRoot: true },
+          { stringFromBottom: 1, fretOffset: -1, finger: '1', interval: '3' },
+          { stringFromBottom: 1, fretOffset: 2, finger: '4', interval: '5' },
+          { stringFromBottom: 2, fretOffset: 1, finger: '3', interval: '7' },
+          { stringFromBottom: 2, fretOffset: 2, finger: '4', interval: 'R', isRoot: true },
+        ],
+      },
+    ],
     genres: ['Jazz', 'Bossa Nova', 'Soul', 'City Pop'],
     artists: ['Antonio Carlos Jobim', 'Jaco Pastorius', 'Steely Dan'],
     albums: ['Getz/Gilberto', 'Jaco Pastorius', 'Aja'],
-    bassApplication: 'En Bossa Nova y Jazz, alternar entre la tónica y la 5ª o subir arpegiando 1-3-5-7 suaviza la cadencia con elegancia.',
+    bassApplication:
+      'En Bossa Nova y Jazz, alternar entre la tónica y la 5ª o subir arpegiando 1-3-5-7 suaviza la cadencia con elegancia.',
   },
   {
     id: 'chord-dom7',
@@ -301,10 +675,27 @@ export const CHORDS_LIBRARY: ChordDef[] = [
     semitones: [0, 4, 7, 10],
     intervals: ['1', '3', '5', 'b7'],
     formula: 'Tónica + 3 + 5 + b7 Menor',
+    shapes: [
+      {
+        id: 'ch-dom7-1',
+        name: 'Shape 1 · Arpegio Dominante 7 (Dedo 2 en Tónica)',
+        description:
+          'Igual que Maj7 pero la 7ª cae justo debajo del dedo 2 (en la cuerda D, mismo traste que la tónica). Es el patrón básico del Blues y Funk.',
+        anchorStringFromBottom: 0,
+        points: [
+          { stringFromBottom: 0, fretOffset: 0, finger: '2', interval: 'R', isRoot: true },
+          { stringFromBottom: 1, fretOffset: -1, finger: '1', interval: '3' },
+          { stringFromBottom: 1, fretOffset: 2, finger: '4', interval: '5' },
+          { stringFromBottom: 2, fretOffset: 0, finger: '2', interval: 'b7' },
+          { stringFromBottom: 2, fretOffset: 2, finger: '4', interval: 'R', isRoot: true },
+        ],
+      },
+    ],
     genres: ['Blues', 'Funk', 'Rock', 'Jazz', 'R&B'],
     artists: ['James Brown', 'Muddy Waters', 'Tower of Power', 'Stevie Ray Vaughan'],
     albums: ['Live at the Apollo', 'Hard Again', 'Tower of Power', 'Couldn’t Stand the Weather'],
-    bassApplication: 'El acorde rey del Blues y el Funk. La b7 (dos trastes detrás de la octava) es la nota de oro para slap, octave grooves y walkdowns.',
+    bassApplication:
+      'El acorde rey del Blues y el Funk. La b7 (dos trastes detrás de la octava) es la nota de oro para slap, octave grooves y walkdowns.',
   },
   {
     id: 'chord-m7',
@@ -314,10 +705,27 @@ export const CHORDS_LIBRARY: ChordDef[] = [
     semitones: [0, 3, 7, 10],
     intervals: ['1', 'b3', '5', 'b7'],
     formula: 'Tónica + b3 + 5 + b7',
+    shapes: [
+      {
+        id: 'ch-m7-1',
+        name: 'Shape 1 · Arpegio Menor 7 (Dedo 1 en Tónica)',
+        description:
+          'La forma más cómoda de todo el bajo: dedo 1 (R) - dedo 4 (b3) en cuerda grave, dedo 3 (5) en la siguiente y dedo 1 (b7) debajo de la tónica.',
+        anchorStringFromBottom: 0,
+        points: [
+          { stringFromBottom: 0, fretOffset: 0, finger: '1', interval: 'R', isRoot: true },
+          { stringFromBottom: 0, fretOffset: 3, finger: '4', interval: 'b3' },
+          { stringFromBottom: 1, fretOffset: 2, finger: '3', interval: '5' },
+          { stringFromBottom: 2, fretOffset: 0, finger: '1', interval: 'b7' },
+          { stringFromBottom: 2, fretOffset: 2, finger: '3', interval: 'R', isRoot: true },
+        ],
+      },
+    ],
     genres: ['Funk', 'Disco', 'Jazz', 'Reggae', 'Neo-Soul'],
     artists: ['Chic', 'Herbie Hancock', 'Miles Davis', 'Jamiroquai'],
     albums: ['Risqué', 'Thrust', 'Kind of Blue', 'Travelling Without Moving'],
-    bassApplication: 'Arpegio 1-b3-5-b7 súper ergonómico en caja de 4 trastes. Base de casi todos los vamps de Funk, Disco y II-V-I.',
+    bassApplication:
+      'Arpegio 1-b3-5-b7 súper ergonómico en caja de 4 trastes. Base de casi todos los vamps de Funk, Disco y II-V-I.',
   },
   {
     id: 'chord-m7b5',
@@ -327,10 +735,26 @@ export const CHORDS_LIBRARY: ChordDef[] = [
     semitones: [0, 3, 6, 10],
     intervals: ['1', 'b3', 'b5', 'b7'],
     formula: 'Tónica + b3 + b5 + b7',
+    shapes: [
+      {
+        id: 'ch-m7b5-1',
+        name: 'Shape 1 · Semidisminuido (1 - b3 - b5 - b7)',
+        description:
+          'Solo baja la 5ª un semitono respecto al Shape de m7 (de dedo 3 a dedo 2). Crucial para II-V-I menores.',
+        anchorStringFromBottom: 0,
+        points: [
+          { stringFromBottom: 0, fretOffset: 0, finger: '1', interval: 'R', isRoot: true },
+          { stringFromBottom: 0, fretOffset: 3, finger: '4', interval: 'b3' },
+          { stringFromBottom: 1, fretOffset: 1, finger: '2', interval: 'b5' },
+          { stringFromBottom: 2, fretOffset: 0, finger: '1', interval: 'b7' },
+        ],
+      },
+    ],
     genres: ['Jazz', 'Bossa Nova', 'Salsa', 'Progressive'],
-    artists: ['Bill Evans', 'Ron Carter', 'buena Vista Social Club'],
+    artists: ['Bill Evans', 'Ron Carter', 'Buena Vista Social Club'],
     albums: ['Sunday at the Village Vanguard', 'All Blues', 'Buena Vista Social Club'],
-    bassApplication: 'Es el II grado de toda progresión II-V-I menor. Evita tocar una 5ª justa por error: apunta siempre a la b5 o b3.',
+    bassApplication:
+      'Es el II grado de toda progresión II-V-I menor. Evita tocar una 5ª justa por error: apunta siempre a la b5 o b3.',
   },
   {
     id: 'chord-9',
@@ -340,10 +764,27 @@ export const CHORDS_LIBRARY: ChordDef[] = [
     semitones: [0, 4, 7, 10, 14],
     intervals: ['1', '3', '5', 'b7', '9'],
     formula: 'Tónica + 3 + 5 + b7 + 9',
+    shapes: [
+      {
+        id: 'ch-9-1',
+        name: 'Shape 1 · Arpegio Funk Dominante 9',
+        description:
+          'Extiende el shape Dominante 7 hacia la cuerda G añadiendo la 9ª mayor dos trastes arriba de la octava.',
+        anchorStringFromBottom: 0,
+        points: [
+          { stringFromBottom: 0, fretOffset: 0, finger: '2', interval: 'R', isRoot: true },
+          { stringFromBottom: 1, fretOffset: -1, finger: '1', interval: '3' },
+          { stringFromBottom: 1, fretOffset: 2, finger: '4', interval: '5' },
+          { stringFromBottom: 2, fretOffset: 0, finger: '2', interval: 'b7' },
+          { stringFromBottom: 2, fretOffset: 4, finger: '4', interval: '9' },
+        ],
+      },
+    ],
     genres: ['Funk', 'R&B', 'Blues Moderno', 'Jazz'],
     artists: ['James Brown', 'Marcus Miller', 'Sly & The Family Stone'],
     albums: ['The Payback', 'Tutu', 'There’s a Riot Goin’ On'],
-    bassApplication: 'En el bajo, la 9ª sobre el traste agudo (una cuerda por encima de la 5ª) aporta el típico color James Brown/Funk en los fills.',
+    bassApplication:
+      'En el bajo, la 9ª sobre el traste agudo aporta el típico color James Brown/Funk en los fills.',
   },
   {
     id: 'chord-7s9',
@@ -356,7 +797,8 @@ export const CHORDS_LIBRARY: ChordDef[] = [
     genres: ['Blues Rock', 'Funk Rock', 'Fusion'],
     artists: ['Jimi Hendrix', 'Stevie Ray Vaughan', 'Weather Report'],
     albums: ['Are You Experienced', 'Texas Flood', 'Heavy Weather'],
-    bassApplication: 'Combina la 3ª mayor en grave con la #9 (=b3) en el registro agudo para choque armónico crudo y eléctrico.',
+    bassApplication:
+      'Combina la 3ª mayor en grave con la #9 (=b3) en el registro agudo para choque armónico crudo y eléctrico.',
   },
   {
     id: 'chord-13',
@@ -369,7 +811,8 @@ export const CHORDS_LIBRARY: ChordDef[] = [
     genres: ['Jazz', 'Soul', 'Big Band', 'R&B'],
     artists: ['Ray Brown', 'Stevie Wonder', 'Paul Jackson'],
     albums: ['Night Train', 'Innervisions', 'Head Hunters'],
-    bassApplication: 'En voicings de bajo (chord melody), toca 1 en cuerda grave + b7 y 3/13 en las cuerdas D y G para evitar barro en graves.',
+    bassApplication:
+      'En voicings de bajo (chord melody), toca 1 en cuerda grave + b7 y 3/13 en las cuerdas D y G para evitar barro en graves.',
   },
   {
     id: 'chord-sus4',
@@ -382,7 +825,8 @@ export const CHORDS_LIBRARY: ChordDef[] = [
     genres: ['Rock', 'Jazz Modal', 'Pop', 'Soul'],
     artists: ['Herbie Hancock', 'The Who', 'Jaco Pastorius'],
     albums: ['Maiden Voyage', 'Who’s Next', 'Heavy Weather'],
-    bassApplication: 'Ambiguo y poderoso: evita tocar la 3ª mayor o menor mientras la armonía flote en sus4; apoya con 1, 4, 5 y b7.',
+    bassApplication:
+      'Ambiguo y poderoso: evita tocar la 3ª mayor o menor mientras la armonía flote en sus4; apoya con 1, 4, 5 y b7.',
   },
   {
     id: 'chord-inv-first',
@@ -395,6 +839,7 @@ export const CHORDS_LIBRARY: ChordDef[] = [
     genres: ['Pop', 'Motown', 'Rock Melódico', 'Jazz'],
     artists: ['The Beatles', 'The Beach Boys', 'James Jamerson'],
     albums: ['Abbey Road', 'Pet Sounds', 'Standing in the Shadows of Motown'],
-    bassApplication: 'Cuando ves un Slash Chord como C/E, tú como bajista eres el responsable de tocar la nota E (la 3ª) en el grave para crear líneas melódicas suaves.',
+    bassApplication:
+      'Cuando ves un Slash Chord como C/E, tú como bajista eres el responsable de tocar la nota E (la 3ª) en el grave para crear líneas melódicas suaves.',
   },
 ];

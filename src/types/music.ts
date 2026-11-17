@@ -29,21 +29,13 @@ export type NoteTechniqueTag =
   | 'accent';
 
 export interface NoteEvent {
-  /** MIDI note number (e.g., E1 = 28, A1 = 33, D2 = 38, G2 = 43). Ignored if isRest is true. */
   midi: number;
-  /** Duration in quarter-note beats (1 = quarter, 0.5 = 8th, 0.25 = 16th, 2 = half, 4 = whole, 1.5 = dotted quarter, 0.333 = triplet 8th) */
   durationBeats: number;
-  /** True if this event is a rest */
   isRest?: boolean;
-  /** Optional explicit string index (0 = lowest/thickest string, or 1..4 from G..E; we use 1=G, 2=D, 3=A, 4=E, 5=B) */
   stringNum?: number;
-  /** Optional explicit fret override */
   fret?: number;
-  /** Articulation / technique tag */
   technique?: NoteTechniqueTag;
-  /** Optional tie from previous note */
   tieToNext?: boolean;
-  /** Optional chord symbol above this beat */
   chordSymbol?: string;
 }
 
@@ -126,6 +118,27 @@ export interface RepertoireTrack {
   bassline: NoteEvent[];
 }
 
+export interface ShapePoint {
+  /** 0 = E string (lowest in 4-string), 1 = A, 2 = D, 3 = G */
+  stringFromBottom: number;
+  /** Fret offset relative to the root anchor fret */
+  fretOffset: number;
+  /** Recommended left-hand finger: 1=Índice, 2=Medio, 3=Anular, 4=Meñique, 0=Al aire */
+  finger: '0' | '1' | '2' | '3' | '4';
+  interval: string;
+  isRoot?: boolean;
+  isBlueNote?: boolean;
+}
+
+export interface BoxShapeDef {
+  id: string;
+  name: string;
+  description: string;
+  /** Prefer root on E string (0) or A string (1) */
+  anchorStringFromBottom: 0 | 1;
+  points: ShapePoint[];
+}
+
 export interface ScaleOrModeDef {
   id: string;
   nameEs: string;
@@ -135,6 +148,9 @@ export interface ScaleOrModeDef {
   intervals: string[];
   formula: string;
   characteristicNote: string;
+  blueNoteIndices?: number[];
+  blueNoteExplanation?: string;
+  shapes?: BoxShapeDef[];
   genres: string[];
   artists: string[];
   albums: string[];
@@ -149,6 +165,7 @@ export interface ChordDef {
   semitones: number[];
   intervals: string[];
   formula: string;
+  shapes?: BoxShapeDef[];
   genres: string[];
   artists: string[];
   albums: string[];
@@ -159,7 +176,6 @@ export interface TuningPreset {
   id: string;
   name: string;
   stringsCount: 4 | 5 | 6;
-  /** Ordered highest pitch to lowest pitch (top string in TAB to bottom string in TAB, e.g. G2, D2, A1, E1) */
   strings: {
     label: string;
     noteEs: string;

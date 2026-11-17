@@ -1,5 +1,5 @@
 import React from 'react';
-import { TuningPreset } from '../types/music';
+import { BoxShapeDef, TuningPreset } from '../types/music';
 import { BassToneMode, playBassNote } from '../utils/audioEngine';
 import { NOTE_NAMES_SHARP, TUNING_PRESETS } from '../utils/musicTheory';
 
@@ -7,6 +7,9 @@ interface FretboardDiagramProps {
   rootPitchClass: number;
   semitones: number[];
   intervalLabels?: string[];
+  blueNoteSemitones?: number[];
+  activeShape?: BoxShapeDef;
+  displayMode?: 'full' | 'shape';
   tuning?: TuningPreset;
   toneMode?: BassToneMode;
   maxFrets?: number;
@@ -18,6 +21,9 @@ export const FretboardDiagram: React.FC<FretboardDiagramProps> = ({
   rootPitchClass,
   semitones,
   intervalLabels,
+  blueNoteSemitones = [],
+  activeShape,
+  displayMode = 'full',
   tuning = TUNING_PRESETS[0],
   toneMode = 'electric_finger',
   maxFrets = 15,
@@ -27,18 +33,52 @@ export const FretboardDiagram: React.FC<FretboardDiagramProps> = ({
   const nutX = 54;
   const width = nutX + maxFrets * fretWidth + 24;
   const topPad = 26;
-  const stringGap = 28;
-  const height = topPad + (stringCount - 1) * stringGap + 34;
+  const stringGap = 30;
+  const height = topPad + (stringCount - 1) * stringGap + 38;
+
+  const blueSet = new Set(blueNoteSemitones.map((s) => (rootPitchClass + s) % 12));
 
   // Map pitchClass -> interval label
-  const pitchInfoMap = new Map<number, { isRoot: boolean; label: string }>();
+  const pitchInfoMap = new Map<number, { isRoot: boolean; isBlueNote: boolean; label: string }>();
   semitones.forEach((semi, idx) => {
     const pc = (rootPitchClass + semi) % 12;
     const label = intervalLabels?.[idx] ?? (semi === 0 ? 'R' : NOTE_NAMES_SHARP[pc]);
     if (!pitchInfoMap.has(pc)) {
-      pitchInfoMap.set(pc, { isRoot: semi % 12 === 0, label });
+      pitchInfoMap.set(pc, {
+        isRoot: semi % 12 === 0,
+        isBlueNote: blueSet.has(pc),
+        label,
+      });
     }
   });
+
+  // Compute concrete fretboard coordinates if in Box Shape mode
+  const shapePointsMap = new Map<string, { finger: string; interval: string; isRoot?: boolean; isBlueNote?: boolean }>();
+  if (activeShape) {
+    // Find anchor fret on bottom-most strings (e.g., E or A string in preset)
+    const bottomIndex = tuning.strings.length - 1;
+    const targetStringIdx = Math.max(0, bottomIndex - activeShape.anchorStringFromBottom);
+    const openPc = ((tuning.strings[targetStringIdx].midi % 12) + 12) % 12;
+    let anchorFret = (rootPitchClass - openPc + 12) % 12;
+    if (anchorFret < 2) anchorFret += 12;
+    if (anchorFret > 12) anchorFret -= 12;
+    if (anchorFret === 0) anchorFret = 12;
+
+    activeShape.points.forEach((pt) => {
+      const sIdx = bottomIndex - pt.stringFromBottom;
+      const fret = anchorFret + pt.fretOffset;
+      if (sIdx >= 0 && sIdx < tuning.strings.length && fret >= 0 && fret <= maxFrets) {
+        shapePointsMap.set(`${sIdx}-${fret}`, {
+          finger: pt.finger,
+          interval: pt.interval,
+          isRoot: pt.isRoot,
+          isBlueNote: pt.isBlueNote,
+        });
+      }
+    });
+  }
+
+  const showShapeOnly = displayMode === 'shape' && shapePointsMap.size > 0;
 
   return (
     <div className="overflow-x-auto border border-slate-200 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 p-4">
@@ -78,16 +118,15 @@ export const FretboardDiagram: React.FC<FretboardDiagramProps> = ({
                 className="stroke-slate-300 dark:stroke-slate-600"
                 strokeWidth={1.6}
               />
-              {FRET_MARKERS.includes(fretNum) && (
-                fretNum === 12 ? (
+              {FRET_MARKERS.includes(fretNum) &&
+                (fretNum === 12 ? (
                   <>
                     <circle cx={centerX} cy={midY - 14} r={4} className="fill-slate-300 dark:fill-slate-600/80" />
                     <circle cx={centerX} cy={midY + 14} r={4} className="fill-slate-300 dark:fill-slate-600/80" />
                   </>
                 ) : (
                   <circle cx={centerX} cy={midY} r={4} className="fill-slate-300 dark:fill-slate-600/80" />
-                )
-              )}
+                ))}
               <text
                 x={centerX}
                 y={height - 6}
@@ -127,42 +166,59 @@ export const FretboardDiagram: React.FC<FretboardDiagramProps> = ({
           );
         })}
 
-        {/* Active Scale / Chord Notes on Fretboard */}
+        {/* Active Notes / Shapes on Fretboard */}
         {tuning.strings.map((str, sIdx) => {
           const y = topPad + sIdx * stringGap;
           return Array.from({ length: maxFrets + 1 }, (_, fret) => {
             const midi = str.midi + fret;
             const pc = ((midi % 12) + 12) % 12;
             const match = pitchInfoMap.get(pc);
-            if (!match) return null;
+            const shapePt = shapePointsMap.get(`${sIdx}-${fret}`);
 
+            if (!match && !shapePt) return null;
+            if (showShapeOnly && !shapePt) return null;
+
+            const isRoot = shapePt ? shapePt.isRoot : match?.isRoot;
+            const isBlueNote = shapePt ? shapePt.isBlueNote : match?.isBlueNote;
             const cx = fret === 0 ? nutX - 16 : nutX + fret * fretWidth - fretWidth / 2;
+
+            const circleFill = isRoot
+              ? 'fill-amber-600 stroke-amber-200 dark:fill-amber-500 dark:stroke-amber-200'
+              : isBlueNote
+                ? 'fill-sky-600 stroke-sky-200 dark:fill-sky-500 dark:stroke-sky-200'
+                : 'fill-slate-900 dark:fill-slate-700 stroke-white dark:stroke-slate-900 group-hover:fill-amber-600';
+
+            const labelText = shapePt
+              ? `${shapePt.interval}`
+              : match?.label || '';
+
             return (
               <g
                 key={`${sIdx}-${fret}`}
-                onClick={() => playBassNote(midi, 0.7, toneMode)}
+                onClick={() => playBassNote(midi, 0.75, toneMode)}
                 className="cursor-pointer group"
               >
-                <circle
-                  cx={cx}
-                  cy={y}
-                  r={11.5}
-                  className={
-                    match.isRoot
-                      ? 'fill-amber-600 stroke-amber-300 dark:fill-amber-500 dark:stroke-amber-200'
-                      : 'fill-slate-900 dark:fill-sky-600 stroke-white dark:stroke-slate-900 group-hover:fill-amber-600'
-                  }
-                  strokeWidth={1.6}
-                />
+                <circle cx={cx} cy={y} r={12.5} className={circleFill} strokeWidth={1.6} />
                 <text
                   x={cx}
-                  y={y + 3.5}
+                  y={shapePt ? y + 1.5 : y + 3.5}
                   textAnchor="middle"
                   className="fill-white font-mono font-bold"
-                  fontSize="10"
+                  fontSize="9.5"
                 >
-                  {match.label}
+                  {labelText}
                 </text>
+                {shapePt && (
+                  <text
+                    x={cx}
+                    y={y + 9.5}
+                    textAnchor="middle"
+                    className="fill-amber-200 font-mono font-semibold"
+                    fontSize="7.5"
+                  >
+                    D{shapePt.finger}
+                  </text>
+                )}
               </g>
             );
           });

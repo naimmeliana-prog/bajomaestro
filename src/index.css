@@ -24,3 +24,42 @@
 .tabular-nums {
   font-variant-numeric: tabular-nums;
 }
+
+@keyframes metroPulseRing {
+  0% {
+    transform: scale(0.88);
+    opacity: 0.9;
+  }
+  70% {
+    transform: scale(1.42);
+    opacity: 0.18;
+  }
+  100% {
+    transform: scale(1.55);
+    opacity: 0;
+  }
+}
+
+@keyframes metroBeatPop {
+  0% {
+    transform: scale(1.16);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-metro-ring {
+  animation: metroPulseRing 360ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-metro-pop {
+  animation: metroBeatPop 220ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-metro-ring,
+  .animate-metro-pop {
+    animation: none;
+  }
+}

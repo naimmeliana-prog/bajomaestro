@@ -12,6 +12,7 @@ import {
   Disc3,
   Eye,
   FileText,
+  Guitar,
   Layers,
   LogIn,
   Moon,
@@ -26,11 +27,13 @@ import { MethodView } from './views/MethodView';
 import { PracticePlanView } from './views/PracticePlanView';
 import { RepertoireView } from './views/RepertoireView';
 import { SightReadingView } from './views/SightReadingView';
+import { TechniquesView } from './views/TechniquesView';
 
-type AppTab = 'method' | 'sight_reading' | 'repertoire' | 'library' | 'lab' | 'practice';
+type AppTab = 'method' | 'techniques' | 'sight_reading' | 'repertoire' | 'library' | 'lab' | 'practice';
 
 const NAV_TABS: { id: AppTab; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
   { id: 'method', label: 'Método', icon: BookOpen },
+  { id: 'techniques', label: 'Técnicas', icon: Guitar },
   { id: 'sight_reading', label: 'Lectura', icon: Eye },
   { id: 'repertoire', label: 'Repertorio', icon: Disc3 },
   { id: 'library', label: 'Biblioteca', icon: Layers },
@@ -175,6 +178,7 @@ const AppShell: React.FC = () => {
       {/* Main Content Stage */}
       <main className="flex-1 max-w-[1380px] w-full mx-auto px-4 sm:px-6 py-6">
         {activeTab === 'method' && <MethodView onOpenPdf={handleOpenPdf} />}
+        {activeTab === 'techniques' && <TechniquesView onOpenPdf={handleOpenPdf} />}
         {activeTab === 'sight_reading' && <SightReadingView onOpenPdf={handleOpenPdf} />}
         {activeTab === 'repertoire' && <RepertoireView onOpenPdf={handleOpenPdf} />}
         {activeTab === 'library' && <LibraryView />}

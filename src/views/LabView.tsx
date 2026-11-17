@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
-  Activity,
   AlertCircle,
   ArrowDown,
   ArrowUp,
@@ -8,26 +7,20 @@ import {
   Gauge,
   Mic,
   MicOff,
-  Pause,
-  Play,
   RotateCcw,
   Volume2,
 } from 'lucide-react';
+import { AdvancedMetronome } from '../components/AdvancedMetronome';
 import { useSync } from '../context/SyncContext';
-import { TimeSignature } from '../types/music';
 import {
   analyzeHarmonicSpectrum,
   audioManager,
   detectBassPitchYIN,
   HarmonicAnalysisResult,
-  MetronomeEngine,
-  MetronomeSubdivision,
   playReferencePitch,
   TunerReading,
 } from '../utils/audioEngine';
 import { NOTE_NAMES_ES_SHARP, NOTE_NAMES_SHARP, TUNING_PRESETS } from '../utils/musicTheory';
-
-const METER_OPTIONS: TimeSignature[] = ['4/4', '3/4', '2/4', '6/8', '12/8', '5/4', '7/8'];
 
 export const LabView: React.FC = () => {
   const { preferences, updatePreferences } = useSync();
@@ -61,43 +54,7 @@ export const LabView: React.FC = () => {
   const lastChordRef = useRef<string>('');
   const lastChordTimeRef = useRef<number>(0);
 
-  // ---------------- METRONOME STATE ----------------
-  const [metroRunning, setMetroRunning] = useState(false);
-  const [bpm, setBpm] = useState(100);
-  const [timeSignature, setTimeSignature] = useState<TimeSignature>('4/4');
-  const [subdivision, setSubdivision] = useState<MetronomeSubdivision>('quarter');
-  const [swingPercent, setSwingPercent] = useState(0);
-  const [activeBeat, setActiveBeat] = useState(-1);
-  const [totalBeats, setTotalBeats] = useState(4);
-
-  const metroRef = useRef<MetronomeEngine | null>(null);
-  const tapTimesRef = useRef<number[]>([]);
-
   const activePreset = TUNING_PRESETS.find((t) => t.id === tuningId) || TUNING_PRESETS[0];
-
-  // Init & cleanup metronome
-  useEffect(() => {
-    const engine = new MetronomeEngine();
-    metroRef.current = engine;
-    return () => {
-      engine.stop();
-    };
-  }, []);
-
-  useEffect(() => {
-    metroRef.current?.configure({
-      bpm,
-      timeSignature,
-      subdivision,
-      swingPercent,
-      onBeat: (beatIdx, beatsCount) => {
-        setActiveBeat(beatIdx);
-        setTotalBeats(beatsCount);
-      },
-    });
-    const [num] = timeSignature.split('/').map(Number);
-    setTotalBeats(num || 4);
-  }, [bpm, timeSignature, subdivision, swingPercent]);
 
   // Cleanup mic streams on unmount
   useEffect(() => {
@@ -235,21 +192,6 @@ export const LabView: React.FC = () => {
     }
   };
 
-  const handleTapTempo = () => {
-    const now = performance.now();
-    const recent = tapTimesRef.current.filter((t) => now - t < 2500);
-    recent.push(now);
-    tapTimesRef.current = recent;
-    if (recent.length >= 2) {
-      const diffs = [];
-      for (let i = 1; i < recent.length; i++) {
-        diffs.push(recent[i] - recent[i - 1]);
-      }
-      const avgMs = diffs.reduce((a, b) => a + b, 0) / diffs.length;
-      const nextBpm = Math.max(30, Math.min(260, Math.round(60000 / avgMs)));
-      setBpm(nextBpm);
-    }
-  };
 
   // Tuner status helpers (dual-coded)
   const isInTune = tunerReading !== null && Math.abs(tunerReading.cents) <= 5;
@@ -425,177 +367,8 @@ export const LabView: React.FC = () => {
           </div>
         </section>
 
-        {/* 2. INTEGRATED LOOKAHEAD METRONOME */}
-        <section className="xl:col-span-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 space-y-4">
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-3.5">
-            <div>
-              <h2 className="font-display font-bold text-lg text-slate-900 dark:text-slate-100 flex items-center gap-2">
-                <Activity className="w-5 h-5 text-amber-600 dark:text-amber-400" />
-                Metrónomo de Estudio (Lookahead)
-              </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Subdivisiones, swing ajustable, compases irregulares y Tap Tempo
-              </p>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => {
-                if (metroRunning) {
-                  metroRef.current?.stop();
-                  setMetroRunning(false);
-                  setActiveBeat(-1);
-                } else {
-                  metroRef.current?.start();
-                  setMetroRunning(true);
-                }
-              }}
-              className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
-                metroRunning
-                  ? 'bg-rose-600 hover:bg-rose-700 text-white'
-                  : 'bg-amber-600 hover:bg-amber-700 text-white'
-              }`}
-            >
-              {metroRunning ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-              {metroRunning ? 'Detener' : 'Iniciar Pulso'}
-            </button>
-          </div>
-
-          {/* Visual Beat Strip */}
-          <div className="flex items-center justify-center gap-2.5 py-2">
-            {Array.from({ length: totalBeats }, (_, i) => {
-              const isCurrent = metroRunning && activeBeat === i;
-              const isOne = i === 0;
-              return (
-                <div
-                  key={i}
-                  className={`flex-1 max-w-14 h-12 rounded-xl border flex flex-col items-center justify-center font-mono font-bold transition-all ${
-                    isCurrent
-                      ? isOne
-                        ? 'bg-amber-600 border-amber-500 text-white scale-105'
-                        : 'bg-sky-600 border-sky-500 text-white scale-105'
-                      : 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400'
-                  }`}
-                >
-                  <span className="text-sm tabular-nums">{i + 1}</span>
-                  <span className="text-[9px] uppercase">{isOne ? 'Acento' : 'Pulso'}</span>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* BPM Control + Tap Tempo */}
-          <div className="bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 rounded-xl p-4 space-y-3">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <div className="text-xs text-slate-500 dark:text-slate-400">Tempo Actual</div>
-                <div className="font-mono font-extrabold text-4xl text-slate-900 dark:text-slate-100 tabular-nums">
-                  {bpm} <span className="text-base font-medium text-slate-500">BPM</span>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-1.5">
-                <button
-                  type="button"
-                  onClick={() => setBpm((v) => Math.max(30, v - 5))}
-                  className="px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono text-xs font-semibold cursor-pointer"
-                >
-                  -5
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setBpm((v) => Math.max(30, v - 1))}
-                  className="px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono text-xs font-semibold cursor-pointer"
-                >
-                  -1
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setBpm((v) => Math.min(260, v + 1))}
-                  className="px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono text-xs font-semibold cursor-pointer"
-                >
-                  +1
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setBpm((v) => Math.min(260, v + 5))}
-                  className="px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono text-xs font-semibold cursor-pointer"
-                >
-                  +5
-                </button>
-                <button
-                  type="button"
-                  onClick={handleTapTempo}
-                  className="px-3 py-1.5 rounded-lg bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 text-xs font-bold cursor-pointer ml-1"
-                >
-                  TAP TEMPO
-                </button>
-              </div>
-            </div>
-
-            <input
-              type="range"
-              min={30}
-              max={260}
-              value={bpm}
-              onChange={(e) => setBpm(Number(e.target.value))}
-              aria-label="Control deslizante de BPM"
-              className="w-full accent-amber-600 cursor-pointer"
-            />
-          </div>
-
-          {/* Meter, Subdivision & Swing */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div className="space-y-1">
-              <label className="text-xs font-semibold text-slate-600 dark:text-slate-400">
-                Compás
-              </label>
-              <select
-                value={timeSignature}
-                onChange={(e) => setTimeSignature(e.target.value as TimeSignature)}
-                className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200"
-              >
-                {METER_OPTIONS.map((m) => (
-                  <option key={m} value={m}>
-                    {m}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-xs font-semibold text-slate-600 dark:text-slate-400">
-                Subdivisión
-              </label>
-              <select
-                value={subdivision}
-                onChange={(e) => setSubdivision(e.target.value as MetronomeSubdivision)}
-                className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200"
-              >
-                <option value="quarter">Negras (1x)</option>
-                <option value="eighth">Corcheas (2x)</option>
-                <option value="triplet">Tresillos (3x)</option>
-                <option value="sixteenth">Semicorcheas (4x)</option>
-              </select>
-            </div>
-
-            <div className="space-y-1">
-              <div className="flex justify-between text-xs font-semibold text-slate-600 dark:text-slate-400">
-                <span>Swing / Shuffle</span>
-                <span className="font-mono tabular-nums">{swingPercent}%</span>
-              </div>
-              <input
-                type="range"
-                min={0}
-                max={65}
-                value={swingPercent}
-                disabled={subdivision !== 'eighth'}
-                onChange={(e) => setSwingPercent(Number(e.target.value))}
-                className="w-full accent-amber-600 cursor-pointer disabled:opacity-40"
-              />
-            </div>
-          </div>
-        </section>
+        {/* 2. ADVANCED METRONOME */}
+        <AdvancedMetronome />
       </div>
 
       {/* Bottom Row: Microphone Real-Time Key & Chord Detector */}

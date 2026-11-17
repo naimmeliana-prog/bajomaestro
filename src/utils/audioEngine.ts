@@ -629,21 +629,33 @@ export class MetronomeEngine {
 
 export interface TunerReading {
   hz: number;
+  targetHz: number;
   midi: number;
   noteIntl: string;
   noteEs: string;
   cents: number;
+  centsFloat: number;
   clarity: number;
+  rmsLevel: number;
 }
 
-export function detectBassPitchYIN(buffer: Float32Array, sampleRate: number): TunerReading | null {
+export function computeRmsLevel(buffer: Float32Array): number {
   const size = buffer.length;
   let rms = 0;
   for (let i = 0; i < size; i++) {
     rms += buffer[i] * buffer[i];
   }
-  rms = Math.sqrt(rms / size);
-  if (rms < 0.012) return null;
+  return Math.sqrt(rms / size);
+}
+
+export function detectBassPitchYIN(
+  buffer: Float32Array,
+  sampleRate: number,
+  a4Hz = 440
+): TunerReading | null {
+  const size = buffer.length;
+  const rms = computeRmsLevel(buffer);
+  if (rms < 0.008) return null;
 
   const minFreq = 27.0;
   const maxFreq = 460.0;
@@ -689,7 +701,7 @@ export function detectBassPitchYIN(buffer: Float32Array, sampleRate: number): Tu
         tauEstimate = tau;
       }
     }
-    if (bestVal > 0.35) return null;
+    if (bestVal > 0.34) return null;
   }
 
   let betterTau = tauEstimate;
@@ -706,18 +718,23 @@ export function detectBassPitchYIN(buffer: Float32Array, sampleRate: number): Tu
   const hz = sampleRate / betterTau;
   if (hz < minFreq || hz > maxFreq) return null;
 
-  const midiFloat = frequencyToMidiFloat(hz);
+  const midiFloat = 69 + 12 * Math.log2(hz / a4Hz);
   const nearestMidi = Math.round(midiFloat);
-  const cents = Math.round((midiFloat - nearestMidi) * 100);
+  const centsFloat = (midiFloat - nearestMidi) * 100;
+  const cents = Math.round(centsFloat);
+  const targetHz = a4Hz * Math.pow(2, (nearestMidi - 69) / 12);
   const info = midiToNoteInfo(nearestMidi, false);
 
   return {
     hz,
+    targetHz,
     midi: nearestMidi,
     noteIntl: info.intl,
     noteEs: info.es,
     cents,
+    centsFloat,
     clarity: Math.max(0, Math.min(1, 1 - cmndf[tauEstimate])),
+    rmsLevel: Math.min(1, rms * 6),
   };
 }
 
